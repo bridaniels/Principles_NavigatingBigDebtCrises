@@ -73,10 +73,15 @@ class DEBT():
     def usDebt_to_gdp(self):
         tot_loans = self.date_range('ASTLL')
         tot_d_securities = self.date_range('ASTDSL')
-        gdp = self.date_range('GDP')
-        tot_debt = pd.concat([tot_loans,tot_d_securities,gdp], axis=1, join='outer')
-        tot_debt['Total_Debt'] = tot_debt[tot_loans] + tot_debt[tot_d_securities]
+        gdp_ = self.date_range('GDP')
+        tot_debt = pd.concat([tot_loans,tot_d_securities,gdp_], axis=1, join='outer')
+        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
         # GDP measured in Billions -> others measured in Millions 
-        tot_debt[gdp] = tot_debt[gdp] * 1000
-        tot_debt['Debtas%GDP'] = tot_debt['Total_Debt'] / tot_debt[gdp]
+        tot_debt['GDP'] = tot_debt['GDP'] * 1000
+        tot_debt['Debtas%GDP'] = tot_debt['Total_Debt'] / tot_debt['GDP']
         return tot_debt
+
+
+
+#tot_debt = pd.concat([debt,gdp], axis=1, join='outer')
+#debt = self.total_us_debt()
