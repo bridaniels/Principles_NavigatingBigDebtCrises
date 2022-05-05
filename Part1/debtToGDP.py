@@ -14,7 +14,7 @@ start = '1960-01-01'
 end = '2021-10-01'
 
 # import .csv data from FRED
-files = os.listdir('data/FRED/')
+files = os.listdir('data/FRED')
 measurements = {}
 for file in files: 
     if file.split('.')[1] == 'csv':
@@ -70,13 +70,13 @@ class DEBT():
         tot_gov_debt['debt_sum'] = tot_gov_debt.sum(axis=1)
         return tot_gov_debt
 
-def usDebt_to_gdp(start,end):
-    tot_loans = date_range(measurements['ASTLL'], start, end)
-    tot_d_securities = date_range(measurements['ASTDSL'], start, end)
-    gdp = date_range(measurements['GDP'],start,end)
-    tot_debt = pd.concat([tot_loans,tot_debt,gdp], axis=1, join='outer')
-    tot_debt['Total_Debt'] = tot_debt[tot_loans] + tot_debt[tot_d_securities]
-    # GDP measured in Billions -> others measured in Millions 
-    tot_debt[gdp] = tot_debt[gdp] * 1000
-    tot_debt['Debtas%GDP'] = tot_debt['Total_Debt'] / tot_debt[gdp]
-    return tot_debt
+    def usDebt_to_gdp(self):
+        tot_loans = self.date_range('ASTLL')
+        tot_d_securities = self.date_range('ASTDSL')
+        gdp = self.date_range('GDP')
+        tot_debt = pd.concat([tot_loans,tot_debt,gdp], axis=1, join='outer')
+        tot_debt['Total_Debt'] = tot_debt[tot_loans] + tot_debt[tot_d_securities]
+        # GDP measured in Billions -> others measured in Millions 
+        tot_debt[gdp] = tot_debt[gdp] * 1000
+        tot_debt['Debtas%GDP'] = tot_debt['Total_Debt'] / tot_debt[gdp]
+        return tot_debt
