@@ -81,7 +81,3 @@ class DEBT():
         tot_debt['Debtas%GDP'] = tot_debt['Total_Debt'] / tot_debt['GDP']
         return tot_debt
 
-
-
-#tot_debt = pd.concat([debt,gdp], axis=1, join='outer')
-#debt = self.total_us_debt()
