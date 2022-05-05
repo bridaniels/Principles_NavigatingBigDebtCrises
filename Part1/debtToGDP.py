@@ -14,7 +14,7 @@ start = '1960-01-01'
 end = '2021-10-01'
 
 # import .csv data from FRED
-files = os.listdir('data/FRED')
+files = os.listdir('data/FRED/')
 measurements = {}
 for file in files: 
     if file.split('.')[1] == 'csv':
@@ -40,10 +40,10 @@ class DEBT():
         return new_df
         
     def total_us_debt(self): #if plotting=True
-        tot_loans = date_range(measurements['ASTLL'], self.start, self.end)
+        tot_loans = self.date_range('ASTLL')
         tot_d_securities = self.date_range('ASTDSL')
-        tot_debt = pd.concat([tot_loans,tot_debt], axis=1, join='outer')
-        tot_debt['Total_Debt'] = tot_debt['tot_loans'] + tot_debt['tot_d_securities']
+        tot_debt = pd.concat([tot_loans,tot_d_securities], axis=1, join='outer')
+        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
         return tot_debt
 
     def total_household_nonprofit_debt(self): 
@@ -59,19 +59,16 @@ class DEBT():
         tot_house_debt['debt_sum'] = tot_house_debt.sum(axis=1)
         return tot_house_debt
 
-    
-    
-    
-def total_gov_debt(start,end): 
-    fed_securities = dtg.date_range(measurements['FGDSLAQ027S'],start,end) #millions Quarterly
-    state_local = dtg.date_range(measurements['SLGSDODNS'],start,end)*1000 #billions Quarterly
-    #fed_non_securities = dtg.date_range(measurements['GFDEBTN-NONSEC'])
-    tot_gov_debt = pd.concat([fed_securities, state_local],
-                            axis=1, join='outer')
-    tot_gov_debt = tot_gov_debt.fillna(0)
-    #tot_gov_debt = tot_gov_debt[tot_gov_debt[] != 0] #no non-quarterly data
-    tot_gov_debt['debt_sum'] = tot_gov_debt.sum(axis=1)
-    return tot_gov_debt
+    def total_gov_debt(self): 
+        fed_securities = self.date_range('FGDSLAQ027S') #millions Quarterly
+        state_local = self.date_range('SLGSDODNS')*1000 #billions Quarterly
+        #fed_non_securities = dtg.date_range(measurements['GFDEBTN-NONSEC'])
+        tot_gov_debt = pd.concat([fed_securities, state_local],
+                                axis=1, join='outer')
+        tot_gov_debt = tot_gov_debt.fillna(0)
+        #tot_gov_debt = tot_gov_debt[tot_gov_debt[] != 0] #no non-quarterly data
+        tot_gov_debt['debt_sum'] = tot_gov_debt.sum(axis=1)
+        return tot_gov_debt
 
 def usDebt_to_gdp(start,end):
     tot_loans = date_range(measurements['ASTLL'], start, end)
