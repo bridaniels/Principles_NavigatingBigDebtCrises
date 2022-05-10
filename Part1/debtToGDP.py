@@ -59,7 +59,7 @@ class DEBT():
 
     def yoy_debt_to_gdp_change(self): 
         og_debt_gdp = self.usDebt_to_gdp()
-        og_debt_gdp['Change'] = og_debt_gdp['Debt_as_%_GDP'] - og_debt_gdp['Debt_as_%_GDP'].shift(-4,axis=0)
+        og_debt_gdp['Change'] = og_debt_gdp['Debt_as_%_GDP'] - og_debt_gdp['Debt_as_%_GDP'].shift(4,axis=0) 
         return og_debt_gdp
 
     def total_household_nonprofit_debt(self): 
