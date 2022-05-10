@@ -9,7 +9,6 @@ import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt 
 
-
 # desired date range 
 start = '1960-01-01'
 end = '2021-10-01'
@@ -59,7 +58,7 @@ class DEBT():
         return tot_debt
 
     def yoy_debt_to_gdp_change(self): 
-        og_debt_gdp = self.usDebt_to_gdp(self)
+        og_debt_gdp = self.usDebt_to_gdp()
         og_debt_gdp['Change'] = og_debt_gdp['Debt_as_%_GDP'] - og_debt_gdp['Debt_as_%_GDP'].shift(-1,axis=0)
         return og_debt_gdp
 
@@ -86,13 +85,13 @@ class DEBT():
         return tot_gov_debt
 
     def total_business_debt(self): 
-        tot_commercial_mort = self.date_range('ASCMA')
-        tot_farm_mort = self.date_range('ASFMA')
-        tot_fin_biz_debt_secur = self.date_range('FBDSILQ027S')
-        tot_fin_biz_loans_liab = self.date_range('FBLL')
-        tot_nf_corp_debt_secur = self.date_range('NCBDBIQ027S')
-        tot_nf_corp_loans = self.date_range('NCBLL')
-        tot_nf_ncorp_biz_loans = self.date_range('NNBLL')
+        tot_commercial_mort = self.date_range('ASCMA') #millions Quarterly
+        tot_farm_mort = self.date_range('ASFMA') #millions Quarterly
+        tot_fin_biz_debt_secur = self.date_range('FBDSILQ027S') #millions Quarterly
+        tot_fin_biz_loans_liab = self.date_range('FBLL') #millions Quarterly
+        tot_nf_corp_debt_secur = self.date_range('NCBDBIQ027S') #millions Quarterly
+        tot_nf_corp_loans = self.date_range('NCBLL') #millionsQuarterly
+        tot_nf_ncorp_biz_loans = self.date_range('NNBLL') #millionsQuarterly
     
         tot_biz_debt = pd.concat([tot_commercial_mort, tot_farm_mort, tot_fin_biz_debt_secur,
                              tot_fin_biz_loans_liab, tot_nf_corp_debt_secur, tot_nf_corp_loans,
@@ -102,21 +101,4 @@ class DEBT():
         tot_biz_debt['debt_sum'] = tot_biz_debt.sum(axis=1)
         return tot_biz_debt
 
-
-
-
-
-class DEBT_PLOTTING(DEBT):
-    def __init__(self, measurements, start='1960-01-01', end='2021-10-01'):
-        super().__init__(measurements, start, end)
-
-    def plot_us_tot_debt(self): 
-        plt.figure(figsize=(16,7))
-        plt.style.use('seaborn-whitegrid')
-
-        plt.plot(self.total_us_debt()['Total_Debt'], label='Total Debt')
-        plt.title('Total US Debt', fontsize=15)
-        plt.ylabel('Total USD Debt in Millions', fontsize=12)
-        plt.legend(loc=2)
-        plt.show()
         
