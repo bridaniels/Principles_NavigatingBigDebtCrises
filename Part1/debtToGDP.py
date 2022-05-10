@@ -9,6 +9,7 @@ import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt 
 
+
 # desired date range 
 start = '1960-01-01'
 end = '2021-10-01'
@@ -46,6 +47,22 @@ class DEBT():
         tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
         return tot_debt
 
+    def usDebt_to_gdp(self):
+        tot_loans = self.date_range('ASTLL')
+        tot_d_securities = self.date_range('ASTDSL')
+        gdp_ = self.date_range('GDP')
+        tot_debt = pd.concat([tot_loans,tot_d_securities,gdp_], axis=1, join='outer')
+        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
+        # GDP measured in Billions -> others measured in Millions 
+        tot_debt['GDP'] = tot_debt['GDP'] * 1000
+        tot_debt['Debt_as_%_GDP'] = tot_debt['Total_Debt'] / tot_debt['GDP']
+        return tot_debt
+
+    def yoy_debt_to_gdp_change(self): 
+        og_debt_gdp = self.usDebt_to_gdp(self)
+        og_debt_gdp['Change'] = og_debt_gdp['Debt_as_%_GDP'] - og_debt_gdp['Debt_as_%_GDP'].shift(-1,axis=0)
+        return og_debt_gdp
+
     def total_household_nonprofit_debt(self): 
         onefour_mort = self.date_range('ASHMA') #millions Quarterly
         multi_mort = self.date_range('ASMRMA') #millions Quarterly
@@ -62,22 +79,44 @@ class DEBT():
     def total_gov_debt(self): 
         fed_securities = self.date_range('FGDSLAQ027S') #millions Quarterly
         state_local = self.date_range('SLGSDODNS')*1000 #billions Quarterly
-        #fed_non_securities = dtg.date_range(measurements['GFDEBTN-NONSEC'])
         tot_gov_debt = pd.concat([fed_securities, state_local],
                                 axis=1, join='outer')
         tot_gov_debt = tot_gov_debt.fillna(0)
-        #tot_gov_debt = tot_gov_debt[tot_gov_debt[] != 0] #no non-quarterly data
         tot_gov_debt['debt_sum'] = tot_gov_debt.sum(axis=1)
         return tot_gov_debt
 
-    def usDebt_to_gdp(self):
-        tot_loans = self.date_range('ASTLL')
-        tot_d_securities = self.date_range('ASTDSL')
-        gdp_ = self.date_range('GDP')
-        tot_debt = pd.concat([tot_loans,tot_d_securities,gdp_], axis=1, join='outer')
-        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
-        # GDP measured in Billions -> others measured in Millions 
-        tot_debt['GDP'] = tot_debt['GDP'] * 1000
-        tot_debt['Debtas%GDP'] = tot_debt['Total_Debt'] / tot_debt['GDP']
-        return tot_debt
+    def total_business_debt(self): 
+        tot_commercial_mort = self.date_range('ASCMA')
+        tot_farm_mort = self.date_range('ASFMA')
+        tot_fin_biz_debt_secur = self.date_range('FBDSILQ027S')
+        tot_fin_biz_loans_liab = self.date_range('FBLL')
+        tot_nf_corp_debt_secur = self.date_range('NCBDBIQ027S')
+        tot_nf_corp_loans = self.date_range('NCBLL')
+        tot_nf_ncorp_biz_loans = self.date_range('NNBLL')
+    
+        tot_biz_debt = pd.concat([tot_commercial_mort, tot_farm_mort, tot_fin_biz_debt_secur,
+                             tot_fin_biz_loans_liab, tot_nf_corp_debt_secur, tot_nf_corp_loans,
+                             tot_nf_ncorp_biz_loans],
+                             axis=1, join='outer')
+        tot_biz_debt = tot_biz_debt.fillna(0)
+        tot_biz_debt['debt_sum'] = tot_biz_debt.sum(axis=1)
+        return tot_biz_debt
 
+
+
+
+
+class DEBT_PLOTTING(DEBT):
+    def __init__(self, measurements, start='1960-01-01', end='2021-10-01'):
+        super().__init__(measurements, start, end)
+
+    def plot_us_tot_debt(self): 
+        plt.figure(figsize=(16,7))
+        plt.style.use('seaborn-whitegrid')
+
+        plt.plot(self.total_us_debt()['Total_Debt'], label='Total Debt')
+        plt.title('Total US Debt', fontsize=15)
+        plt.ylabel('Total USD Debt in Millions', fontsize=12)
+        plt.legend(loc=2)
+        plt.show()
+        
