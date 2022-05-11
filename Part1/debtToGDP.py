@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter, PercentFormatter
 
 
-# desired date range 
+# default date range 
 start = '1960-01-01'
 end = '2021-10-01'
 
@@ -60,6 +60,9 @@ class DEBT():
         tot_debt = self.tot_debt_to_gdp()
         tot_debt['yoy_change'] = tot_debt['debtTOgdp'] - tot_debt['debtTOgdp'].shift(4,axis=0)
         return tot_debt
+
+
+    ''' CLEAN THESE NEXT '''
 
     def total_household_nonprofit_debt(self): 
         onefour_mort = self.date_range('ASHMA') #millions Quarterly
