@@ -26,8 +26,11 @@
 
 # References: 
 
-### **Ray Dalio, *Principles For Navigating Big Debt Crises* (Westport, CT: Bridgewater, 2018)**
+### Ray Dalio, *Principles For Navigating Big Debt Crises* (Westport, CT: Bridgewater, 2018)
 - [access book here](https://www.principles.com/big-debt-crises/)
+- [youtube channel](https://www.youtube.com/c/principlesbyraydalio/featured)
+- [Ray Dalio Forbes](https://www.forbes.com/profile/ray-dalio/?sh=1c7f8f2663aa)
+- [Bridgewater Associates LP](https://www.bloomberg.com/profile/company/20273Z:US)
 ---
 ### Data from [Federal Reserve Bank of St. Louis, FRED®](https://fred.stlouisfed.org/)
 - This product uses the FRED® API but is not endorsed or certfied by the Federal Reserve Bank of St. Louis 
