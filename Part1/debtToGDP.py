@@ -9,6 +9,9 @@ import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt 
 
+from matplotlib.ticker import FuncFormatter, PercentFormatter
+
+
 # desired date range 
 start = '1960-01-01'
 end = '2021-10-01'
@@ -38,29 +41,25 @@ class DEBT():
         new_df = measurements[file_addy][self.start:self.end]
         new_df = new_df.astype(float, errors='raise')
         return new_df
-        
-    def total_us_debt(self): #if plotting=True
-        tot_loans = self.date_range('ASTLL')
-        tot_d_securities = self.date_range('ASTDSL')
+
+    def tot_us_debt(self): 
+        tot_loans = self.date_range('ASTLL') #millions Quarterly 
+        tot_d_securities = self.date_range('ASTDSL') #millions Quarterly
         tot_debt = pd.concat([tot_loans,tot_d_securities], axis=1, join='outer')
-        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
+        tot_debt['debt_sum'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
         return tot_debt
 
-    def usDebt_to_gdp(self):
-        tot_loans = self.date_range('ASTLL')
-        tot_d_securities = self.date_range('ASTDSL')
-        gdp_ = self.date_range('GDP')
-        tot_debt = pd.concat([tot_loans,tot_d_securities,gdp_], axis=1, join='outer')
-        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
-        # GDP measured in Billions -> others measured in Millions 
-        tot_debt['GDP'] = tot_debt['GDP'] * 1000
-        tot_debt['Debt_as_%_GDP'] = tot_debt['Total_Debt'] / tot_debt['GDP']
+    def tot_debt_to_gdp(self): 
+        prevdebt = self.tot_us_debt() #millions Quarterly
+        gdp_ = self.date_range('GDP')*1000 #billions Quarterly
+        tot_debt = pd.concat([prevdebt, gdp_], axis=1, join='outer')
+        tot_debt['debtTOgdp'] = tot_debt['debt_sum'] / tot_debt['GDP']
         return tot_debt
-
-    def yoy_debt_to_gdp_change(self): 
-        og_debt_gdp = self.usDebt_to_gdp()
-        og_debt_gdp['Change'] = og_debt_gdp['Debt_as_%_GDP'] - og_debt_gdp['Debt_as_%_GDP'].shift(4,axis=0) 
-        return og_debt_gdp
+    
+    def yoy_debt(self): 
+        tot_debt = self.tot_debt_to_gdp()
+        tot_debt['yoy_change'] = tot_debt['debtTOgdp'] - tot_debt['debtTOgdp'].shift(4,axis=0)
+        return tot_debt
 
     def total_household_nonprofit_debt(self): 
         onefour_mort = self.date_range('ASHMA') #millions Quarterly
@@ -101,4 +100,75 @@ class DEBT():
         tot_biz_debt['debt_sum'] = tot_biz_debt.sum(axis=1)
         return tot_biz_debt
 
+    ''' messier version '''
+
+    def total_us_debt(self): #if plotting=True
+        tot_loans = self.date_range('ASTLL') #millions Quarterly 
+        tot_d_securities = self.date_range('ASTDSL') #millions Quarterly
+        tot_debt = pd.concat([tot_loans,tot_d_securities], axis=1, join='outer')
+        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
+        return tot_debt
+
+    def usDebt_to_gdp(self):
+        tot_loans = self.date_range('ASTLL') #millions Quarterly 
+        tot_d_securities = self.date_range('ASTDSL') #millions Quarterly
+        gdp_ = self.date_range('GDP')*1000 #billions Quarterly
+        tot_debt = pd.concat([tot_loans, tot_d_securities, gdp_], axis=1, join='outer')
+        tot_debt['Total_Debt'] = tot_debt['ASTLL'] + tot_debt['ASTDSL']
+        tot_debt['Debt_as_%_GDP'] = tot_debt['Total_Debt'] / tot_debt['GDP']
+        return tot_debt
+
+    def yoy_debt_to_gdp_change(self): 
+        og_debt_gdp = self.usDebt_to_gdp()
+        og_debt_gdp['Change'] = og_debt_gdp['Debt_as_%_GDP'] - og_debt_gdp['Debt_as_%_GDP'].shift(4,axis=0) 
+        return og_debt_gdp
+
+
+
+
+class DEBT_PLOTTING(DEBT): 
+    def __init__(self, measurements, start='1960-01-01', end='2021-10-01'):
+        super().__init__(measurements, start, end)
+
+    def formTMilly(x,pos): 
+        # Trillions from Millions
+        return '%1.1fT' % (x * 1e-6)
+
+    def us_gdp_v_debt(self): 
+        yoy = self.yoy_debt()
+        fig, ax = plt.subplots(figsize=(19,8))
+
+        ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue')
+        ax.bar(yoy.index, yoy.yoy_change, width=50, color='tab:olive')
+        ax.fill_between(yoy.index, 0, yoy.yoy_change, color='green', alpha=0.3)
+        ax.axhline(y=0, linewidth=0.5, linestyle='--')
+        ax.yaxis.set_major_formatter(PercentFormatter())
+        ax.set_ylabel('YOY Change in Debt to GDP', fontsize=12)
+        ax.legend(loc=2)
+
+        ax2 = ax.twinx()
+        ax2.plot(yoy.debtTOgdp, label='Debt %_GDP', color='0.1', linewidth=2)
+        ax2.set_ylabel('Debt to GDP %', fontsize=12)
+        ax2.yaxis.set_major_formatter(PercentFormatter(1))
+        ax2.legend(loc=1)
+        ax2.set_title('US Debt to GDP', fontsize=20)
+
+
         
+''' 
+
+CleanUP
+1. API documentation from FRED
+2. for loop to append DF rather than individual
+    - import into different lists? 
+    - API documentation? 
+    - fillna(0) within the loop -> less messy 
+    - plotting value in the formula? 
+         k = plt.plot(yadayadayada)?
+3. various date range selections 
+4. separate plotting class
+5. change way .csv files pulled 
+6. Bar Chart on US Debt to GDP Changes 
+7. combine total us debt with debt to gdp and yoy 
+
+'''
