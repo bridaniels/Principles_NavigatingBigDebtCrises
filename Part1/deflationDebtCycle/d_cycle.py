@@ -199,21 +199,25 @@ class BUBBLE_PLOTTING(BUBBLE):
 
 
 '''
+HOUSEHOLD DEBT NOT QUARTERLY IN BUBBLE()
+
 FUNCFORMATTER TMILLY ISSUE -> ADD TO INIT AS FUNCTION? 
     - CATEGORY DEBT CHART ISSUE 
+    - Household debt isn't showing up right -> frequency issue? 
+
 KEEP WORKING THROUGH DEBTTOGDP
 what dates to pull for bubbles? 
 '''
 
-#bub = BUBBLE()
-#k = bub.debt_to_gdp()
-#print(k.tail(20))
+bub = BUBBLE()
+k = bub.df_household_debt()
+print(k.tail(20))
 
 #lol = ARTICLE_LISTS()
-#lolly = lol.list_category_debt()
+#lolly = lol.list_household_debt()
 #print(lolly)
 
-plotty = BUBBLE_PLOTTING()
-debty = plotty.plot_category_debt()
-debty
+#plotty = BUBBLE_PLOTTING()
+#debty = plotty.plot_category_debt()
+#debty
 
