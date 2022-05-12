@@ -8,38 +8,51 @@ import datetime as dt
 
 import matplotlib.pyplot as plt 
 
+from typing import List
+
+# FORMAT PLOT TICKERS  
 from matplotlib.ticker import FuncFormatter, PercentFormatter
+#PercentFormatter(x): x=how many decimal places you want to move
+def fromTMilly(x, pos): 
+    #Trillions from Millions
+    return '%1.1fT' % (x*1e-6)
+formatterTMilly = FuncFormatter(fromTMilly)
 
 # IMPORT API KEY 
 from fredapi import Fred
 api_key = os.environ.get("FRED_API_KEY")
 fred = Fred(api_key=api_key)
 
-
-# default date range 
+# DEFAULT DATE RANGE
 default_start = '1960-01-01'
 default_end = '2021-10-01'
 
 
-class ARTICLE_LISTS(): 
+
+# Pull headers into list to be added to DF 
+class DATA_LISTS(): 
     def __init__(self) -> None:
         pass
 
-    def list_us_debt(self): 
+    def list_us_debt(self, list_urls=False): 
         tot_debt = []
         # Millions Quarterly 
         tot_debt.append('ASTLL') #All Sectors; Total Loans; Liability, Level 
         tot_debt.append('ASTDSL') #All Sectors; Total Debt Securities; Liability, Level 
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
         return tot_debt
-    def list_debt_to_gdp(self): 
+    def list_debt_to_gdp(self, list_urls=False): 
         tot_debt = []
         # Millions Quarterly 
         tot_debt.extend(self.list_us_debt())
         # Billions Quarterly 
         tot_debt.append('GDP') #Gross Domestic Product
+        if list_urls is not False:
+            return self.list_to_url(tot_debt)
         return tot_debt
 
-    def list_household_nonprofit_debt(self): 
+    def list_household_nonprofit_debt(self, list_urls=False): 
         tot_debt = []
         # Millions Quarterly 
         tot_debt.append('ASHMA') #All Sectors; 1-4-Family Residential Mortgages: Asset, Level
@@ -49,15 +62,19 @@ class ARTICLE_LISTS():
         tot_debt.append('SLOAS') #Student Loans Owned and Securitized
         # Billions Monthly
         tot_debt.append('REVOLSL') #Revolving Consumer Credit Owned and Securitized
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
         return tot_debt
-    def list_government_debt(self): 
+    def list_government_debt(self, list_urls=False): 
         tot_debt = []
         # Millions Quarterly 
         tot_debt.append('FGDSLAQ027S') #Federal Government; Debt Securities; Liability, Level
         # Billions Quarterly 
         tot_debt.append('SLGSDODNS') #State and Local Governments; Debt Securities and Loans; Liability, Level
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
         return tot_debt
-    def list_business_debt(self): 
+    def list_business_debt(self, list_urls=False): 
         tot_debt = [] 
         # Millions Quarterly 
         tot_debt.append('ASCMA') #All Sectors; Commercial Mortgages; Asset, Level 
@@ -67,19 +84,34 @@ class ARTICLE_LISTS():
         tot_debt.append('NCBDBIQ027S') #Nonfinancial Corporate Business; Debt Securities; Liability, Level 
         tot_debt.append('NCBLL') #Nonfinancial Corporate Business; Loans; Liability, Level 
         tot_debt.append('NNBLL') #Nonfinancial Noncorporate Business; Loans; Liability, Level 
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
         return tot_debt
-    def list_category_debt(self): 
+    def list_category_debt(self, list_urls=False): 
         tot_debt = []
         tot_debt.extend(self.list_household_nonprofit_debt())
         tot_debt.extend(self.list_government_debt())
         tot_debt.extend(self.list_business_debt())
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
         return tot_debt
+
+    def list_to_url(self, debt_list):
+        '''
+        debt_list: List[str]
+            - returned list from selected list function 
+        '''
+        for i in range(len(debt_list)): 
+            debt_list[i] = 'https://fred.stlouisfed.org/series/'+debt_list[i]
+        return debt_list
+
+
 
         
 
 
 
-class BUBBLE(ARTICLE_LISTS): 
+class BUBBLE(DATA_LISTS): 
     def __init__(self, frequency='q', start=default_start, end=default_end) -> None:
         '''
         Parameters: 
@@ -104,7 +136,7 @@ class BUBBLE(ARTICLE_LISTS):
         list = self.list_debt_to_gdp()
         df = {}
         for i in range(len(list)): 
-            df[list[i]] = fred.get_series(list[i], self.start, self.end, kwargs=self.frequency)
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
         df = pd.DataFrame(df)
         df['GDP'] = df['GDP'] * 1000 #Billions to Millions
         df['debt_sum'] = df.iloc[:,:-1].sum(axis=1) #.iloc[:,:-1] to not get GDP column 
@@ -116,7 +148,9 @@ class BUBBLE(ARTICLE_LISTS):
         list = self.list_household_nonprofit_debt()
         df = {}
         for i in range(len(list)): 
-            df[list[i]] = fred.get_series(list[i], self.start, self.end, kwargs=self.frequency)
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+            if fred.get_series_info(list[i]).units_short == 'Bil. of $':
+                df[list[i]] = df[list[i]] * 1000
         df = pd.DataFrame(df)
         df['debt_sum'] = df.sum(axis=1)
         return df 
@@ -124,7 +158,9 @@ class BUBBLE(ARTICLE_LISTS):
         list = self.list_government_debt()
         df = {}
         for i in range(len(list)): 
-            df[list[i]] = fred.get_series(list[i], self.start, self.end, kwargs=self.frequency)
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+            if fred.get_series_info(list[i]).units_short == 'Bil. of $':
+                df[list[i]] = df[list[i]] * 1000
         df = pd.DataFrame(df)
         df['debt_sum'] = df.sum(axis=1)
         return df 
@@ -132,7 +168,9 @@ class BUBBLE(ARTICLE_LISTS):
         list = self.list_business_debt()
         df = {}
         for i in range(len(list)): 
-            df[list[i]] = fred.get_series(list[i], self.start, self.end, kwargs=self.frequency)
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+            if fred.get_series_info(list[i]).units_short == 'Bil. of $':
+                df[list[i]] = df[list[i]] * 1000
         df = pd.DataFrame(df)
         df['debt_sum'] = df.sum(axis=1)
         return df 
@@ -140,7 +178,9 @@ class BUBBLE(ARTICLE_LISTS):
         list = self.list_category_debt()
         df = {}
         for i in range(len(list)): 
-            df[list[i]] = fred.get_series(list[i], self.start, self.end, kwargs=self.frequency)
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+            if fred.get_series_info(list[i]).units_short == 'Bil. of $':
+                df[list[i]] = df[list[i]] * 1000
         df = pd.DataFrame(df)
         df['debt_sum'] = df.sum(axis=1)
         return df 
@@ -150,13 +190,6 @@ class BUBBLE(ARTICLE_LISTS):
 class BUBBLE_PLOTTING(BUBBLE):
     def __init__(self, frequency='q', start=default_start, end=default_end) -> None:
         super().__init__(frequency, start, end)
-        self.frequency = frequency
-        self.start = start
-        self.end = end 
-
-    def fromTMilly(x,pos): 
-        #Trillions from Millions
-        return '%1.1fT' % (x*1e-6)
 
     def plot_debt_to_gdp(self): 
         yoy = self.df_debt_to_gdp()
@@ -181,7 +214,6 @@ class BUBBLE_PLOTTING(BUBBLE):
         biz = self.df_business_debt()
         gov = self.df_government_debt()
         house = self.df_household_debt()
-        #formatterTMilly = FuncFormatter(self.fromTMilly)
 
         fig,ax = plt.subplots(figsize=(16,8))
 
@@ -194,30 +226,47 @@ class BUBBLE_PLOTTING(BUBBLE):
 
         ax.set_title('Debt by Category', fontsize=20)
         ax.set_ylabel('Debt (in Trillions)', fontsize=12)
-        #ax.yaxis.set_major_formatter(formaterTMilly)
-        ax.legend(borderpad=1, loc=2)
+        ax.yaxis.set_major_formatter(formatterTMilly)
+        ax.legend(borderpad=1, loc=2, fontsize=10)
+
+    def plot_debt_vs_gdp(self): 
+        df = self.df_debt_to_gdp()
+        cdf = self.df_category_debt()
+
+        fig,ax = plt.subplots(figsize=(16,8))
+
+        ax.plot(df['debt_sum'], label='Total US Debt', color='red', linewidth=2)
+        ax.plot(cdf['debt_sum'], label='Category US Debt', color='purple', linewidth=1.7)
+        ax.plot(df['GDP'], label='Real GDP', color='green', linewidth=2)
+
+        ax.fill_between(df.index, df.GDP, df.debt_sum, color='red', alpha=0.1)
+        ax.fill_between(df.index, df.GDP, color='green', alpha=0.2)
+        ax.yaxis.set_major_formatter(formatterTMilly)
+        ax.set_ylabel('Real GDP vs. Debt', fontsize=12)
+        ax.legend(loc=2, borderpad=1, fontsize=10)
+        ax.set_title('US GDP vs. Debt', fontsize=20)
+
+        ax2 = ax.twinx()
+        ax2.plot(df.GDP, label='Adjusted Real GDP', color='green', linewidth=1.5, alpha=0.6, linestyle='--')
+        ax2.yaxis.set_major_formatter(formatterTMilly)
+        ax2.set_ylabel('Adjusted Real GDP', fontsize=12)
+        ax2.legend(loc=1, borderpad=1, fontsize=10)
 
 
-'''
-HOUSEHOLD DEBT NOT QUARTERLY IN BUBBLE()
 
-FUNCFORMATTER TMILLY ISSUE -> ADD TO INIT AS FUNCTION? 
-    - CATEGORY DEBT CHART ISSUE 
-    - Household debt isn't showing up right -> frequency issue? 
 
-KEEP WORKING THROUGH DEBTTOGDP
-what dates to pull for bubbles? 
-'''
-
-bub = BUBBLE()
-k = bub.df_household_debt()
-print(k.tail(20))
-
-#lol = ARTICLE_LISTS()
+#lol = DATA_LISTS()
 #lolly = lol.list_household_debt()
+#lolly = lol.list_government_debt(list_urls=True)
 #print(lolly)
+#print(lolly)
+
+#bub = BUBBLE()
+#k = bub.df_household_debt()
+#print(k.tail(20))
 
 #plotty = BUBBLE_PLOTTING()
 #debty = plotty.plot_category_debt()
+#debty = plotty.plot_debt_vs_gdp()
 #debty
 
