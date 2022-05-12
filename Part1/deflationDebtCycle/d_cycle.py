@@ -131,14 +131,13 @@ class BUBBLE(DATA_LISTS):
         self.start = start 
         self.end = end
 
-
     def df_debt_to_gdp(self): 
         list = self.list_debt_to_gdp()
         df = {}
         for i in range(len(list)): 
             df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
         df = pd.DataFrame(df)
-        df['GDP'] = df['GDP'] * 1000 #Billions to Millions
+        df['GDP'] = df['GDP'] * 1000
         df['debt_sum'] = df.iloc[:,:-1].sum(axis=1) #.iloc[:,:-1] to not get GDP column 
         df['pcnt_GDP'] = df['debt_sum'] / df['GDP']
         df['yoy_change'] = df['pcnt_GDP'] - df['pcnt_GDP'].shift(4,axis=0)
@@ -185,6 +184,13 @@ class BUBBLE(DATA_LISTS):
         df['debt_sum'] = df.sum(axis=1)
         return df 
     
+    def df_add_gdp(self): 
+        g = fred.get_series('GDP', self.start, self.end, frequency=self.frequency)
+        g = pd.DataFrame(g)
+        g.columns=['GDP']
+        g['GDP'] = g['GDP']*1000
+        return g 
+    
 
 
 class BUBBLE_PLOTTING(BUBBLE):
@@ -197,7 +203,7 @@ class BUBBLE_PLOTTING(BUBBLE):
 
         ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue')
         ax.bar(yoy.index, yoy.yoy_change, width=50, color='tab:olive')
-        ax.fill_between(yoy.index, 0, yoy.yoy_change, color='green', alpha=0.3)
+        ax.fill_between(yoy.index, 0, yoy['yoy_change'], color='green', alpha=0.3)
         ax.axhline(y=0, linewidth=0.5, linestyle='--')
         ax.yaxis.set_major_formatter(PercentFormatter())
         ax.set_ylabel('YOY Change in Debt to GDP', fontsize=12)
@@ -252,6 +258,67 @@ class BUBBLE_PLOTTING(BUBBLE):
         ax2.set_ylabel('Adjusted Real GDP', fontsize=12)
         ax2.legend(loc=1, borderpad=1, fontsize=10)
 
+
+
+
+
+
+    def plot_category_debt_to_gdp(self): 
+        yoy = self.df_debt_to_gdp()
+        g = self.df_add_gdp()
+
+        house = self.df_household_debt()
+        g_house = pd.concat([house,g], axis=1, join='outer')
+        g_house['pcnt_gdp'] = g_house['debt_sum'] / g_house['GDP']
+        gov = self.df_government_debt()
+        g_gov = pd.concat([gov,g], axis=1, join='outer')
+        g_gov['pcnt_gdp'] = g_gov['debt_sum'] / g_gov['GDP']
+        biz = self.df_business_debt()
+        g_biz = pd.concat([biz,g], axis=1, join='outer')
+        g_biz['pcnt_gdp'] = g_biz['debt_sum'] / g_biz['GDP']
+
+        #Plot
+        fig,ax = plt.subplots(figsize=(19,8))
+        ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue')
+        ax.bar(yoy.index, g_house['pcnt_gdp'], width=50, color='skyblue', label='Household+Non-Profit Debt')
+        ax.bar(yoy.index, g_gov['pcnt_gdp'], width=50, color='tab:olive', label='Government Debt', bottom=house['debt_sum'])
+        ax.bar(yoy.index, g_biz['pcnt_gdp'], width=50, color='green', label='Business Debt', bottom=gov['debt_sum'])
+        ax.fill_between(yoy.index, 0, yoy.yoy_change, color='green', alpha=0.3)
+        ax.axhline(y=0, linewidth=0.5, linestyle='--')
+        ax.yaxis.set_major_formatter(PercentFormatter())
+        ax.set_ylabel('YOY Change in Debt to GDP', fontsize=12)
+        ax.legend(loc=2)
+
+        ax2 = ax.twinx()
+        ax2.plot(yoy.pcnt_GDP, label='%'+' of GDP', color='0.1', linewidth=2)
+        ax2.yaxis.set_major_formatter(PercentFormatter(1))
+        ax2.set_ylabel('Total Debt to GDP %', fontsize=12)
+        ax2.legend(loc=1)
+        ax2.set_title('US Debt to GDP', fontsize=20)
+
+
+'''
+CLEANUP: 
+1. plot category debt to gdp 
+
+
+Debt Cycle as a Whole 
+1. Start with '08 for each step 
+2. Grab a few other smaller recessions -> same analysis 
+3. Resize each dataset to fit onto the same X-Axis
+    - differences/similarities in the timelines? 
+
+01_early
+- do whole cycle overall analysis 
+- intro to debt cycle 
+02_bubble
+- shade out other parts of the cycle on graph so you can kinda see the whole thing
+    - focus on the 'bubble' part 
+- % change in numbers qoq not yoy -> too short a timespan 
+03_top 
+
+
+'''
 
 
 
