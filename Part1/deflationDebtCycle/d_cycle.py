@@ -235,7 +235,7 @@ class BUBBLE_PLOTTING(BUBBLE):
         ax.yaxis.set_major_formatter(formatterTMilly)
         ax.legend(borderpad=1, loc=2, fontsize=10)
 
-    def plot_debt_vs_gdp(self): 
+    def plot_debt_vs_gdp(self, adjusted_GDP=False): 
         df = self.df_debt_to_gdp()
         cdf = self.df_category_debt()
 
@@ -252,68 +252,19 @@ class BUBBLE_PLOTTING(BUBBLE):
         ax.legend(loc=2, borderpad=1, fontsize=10)
         ax.set_title('US GDP vs. Debt', fontsize=20)
 
-        ax2 = ax.twinx()
-        ax2.plot(df.GDP, label='Adjusted Real GDP', color='green', linewidth=1.5, alpha=0.6, linestyle='--')
-        ax2.yaxis.set_major_formatter(formatterTMilly)
-        ax2.set_ylabel('Adjusted Real GDP', fontsize=12)
-        ax2.legend(loc=1, borderpad=1, fontsize=10)
+        if adjusted_GDP is not False: 
+            ax2 = ax.twinx()
+            ax2.plot(df.GDP, label='Adjusted Real GDP', color='green', linewidth=1.5, alpha=0.6, linestyle='--')
+            ax2.yaxis.set_major_formatter(formatterTMilly)
+            ax2.set_ylabel('Adjusted Real GDP', fontsize=12)
+            ax2.legend(loc=1, borderpad=1, fontsize=10)
 
 
 
 
-
-
-
-class MIXED_BAR_CHART(BUBBLE):
-    def __init__(self, frequency='q', start=default_start, end=default_end) -> None:
-        super().__init__(frequency, start, end)
-
-    def plot_category_debt_to_gdp(self): 
-        yoy = self.df_debt_to_gdp()
-        g = self.df_add_gdp()
-
-        house = self.df_household_debt()
-        g_house = pd.concat([house,g], axis=1, join='outer')
-        g_house['pcnt_gdp'] = g_house['debt_sum'] / g_house['GDP']
-        g_house['yoy'] = g_house['pcnt_gdp'] - g_house['pcnt_gdp'].shift(4,axis=0)
-        gov = self.df_government_debt()
-        g_gov = pd.concat([gov,g], axis=1, join='outer')
-        g_gov['pcnt_gdp'] = g_gov['debt_sum'] / g_gov['GDP']
-        g_gov['yoy'] = g_gov['pcnt_gdp'] - g_gov['pcnt_gdp'].shift(4,axis=0)
-        biz = self.df_business_debt()
-        g_biz = pd.concat([biz,g], axis=1, join='outer')
-        g_biz['pcnt_gdp'] = g_biz['debt_sum'] / g_biz['GDP']
-        g_biz['yoy'] = g_biz['pcnt_gdp'] - g_biz['pcnt_gdp'].shift(4,axis=0)
-
-        house_yoy = g_house['yoy']
-        gov_yoy = g_gov['yoy']
-        biz_yoy = g_biz['yoy']
-
-        #Plot
-        fig,ax = plt.subplots(figsize=(19,8))
-        ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue')
-        ax.bar(yoy.index, house_yoy, width=50, color='skyblue', label='Household+Non-Profit Debt')
-        ax.bar(yoy.index, gov_yoy, width=50, bottom=house_yoy, color='tab:olive', label='Government Debt')
-        ax.bar(yoy.index, biz_yoy, width=50, bottom=gov_yoy+house_yoy, color='green', label='Business Debt')
-        ax.fill_between(yoy.index, 0, yoy.yoy_change, color='blue', alpha=0.1)
-        ax.set_ylim([-1,1])
-        ax.axhline(y=0, linewidth=0.5, linestyle='--')
-        ax.yaxis.set_major_formatter(PercentFormatter())
-        ax.set_ylabel('YOY Change in Debt to GDP', fontsize=12)
-        ax.legend(loc=2)
-
-    def extra(self): 
-        ax2 = ax.twinx()
-        ax2.plot(yoy.pcnt_GDP, label='%'+' of GDP', color='0.1', linewidth=2)
-        ax2.yaxis.set_major_formatter(PercentFormatter(1))
-        ax2.set_ylabel('Total Debt to GDP %', fontsize=12)
-        ax2.legend(loc=1)
-        ax2.set_title('US Debt to GDP', fontsize=20)    
 
 '''
 CLEANUP: 
-1. plot category debt to gdp 
-    - percentages not lining up correctly 
 
 
 Debt Cycle as a Whole 
@@ -351,3 +302,86 @@ Debt Cycle as a Whole
 #debty = plotty.plot_debt_vs_gdp()
 #debty
 
+
+
+# stacked bar chart work 
+# create new df with just positive and negative values to plot 
+# US Debt to GDP via categories? 
+    # https://matplotlib.org/stable/gallery/lines_bars_and_markers/horizontal_barchart_distribution.html
+    # change to dictionary -> dataframe data structure not working properly 
+    # would need to sort positive vs. negative values in the DF to organize properly
+        # then graph the positive values separate from the negative 
+'''
+g = d.df_add_gdp()
+house = d.df_household_debt()
+gov = d.df_government_debt()
+biz = d.df_business_debt()
+
+
+# Calc Percent of GDP
+house['pcnt'] = house['debt_sum'] / g['GDP']
+gov['pcnt'] = gov['debt_sum'] / g['GDP']
+biz['pcnt'] = biz['debt_sum'] / g['GDP']
+
+# Calc YOY Change 
+house['yoy'] = house['pcnt'] - house['pcnt'].shift(4,axis=0)
+gov['yoy'] = gov['pcnt'] - gov['pcnt'].shift(4,axis=0)
+biz['yoy'] = biz['pcnt'] - biz['pcnt'].shift(4,axis=0)
+
+# .fillna(0)
+house = house.fillna(0)
+gov = gov.fillna(0)
+biz = biz.fillna(0)
+
+def separate(data): 
+    pos = len(data) * [0]
+    neg = len(data) * [0]
+    #headers = data.columns 
+    for idx, number in enumerate(data['yoy']):
+        if number < 0: 
+            neg[idx] = number
+            pos[idx] = None
+        else: 
+            pos[idx] = number
+            neg[idx] = None
+    data['negative'] = neg
+    data['positive'] = pos
+    return data  
+
+house = separate(house)
+gov = separate(gov)
+biz = separate(biz)
+
+house = house[['negative', 'positive']].copy()
+house.rename(columns= {'negative':'neg_house', 'positive':'pos_house'},inplace=True)
+gov = gov[['negative', 'positive']].copy()
+gov.rename(columns={'negative':'neg_gov', 'positive':'pos_gov'}, inplace=True)
+biz = biz[['negative', 'positive']].copy()
+biz.rename(columns={'negative':'neg_biz', 'positive':'pos_biz'}, inplace=True)
+
+cat = pd.concat([house,gov,biz], axis=1, join='outer')
+
+'''
+# PLOTTING ATTEMPTS
+'''
+plt.figure(figsize=(16,8))
+
+plt.bar(biz.index, biz['positive'], width=40, color='skyblue')
+plt.bar(biz.index, biz['negative'], width=40, color='skyblue')
+plt.bar(house.index, height=house['positive']+biz['positive'], width=40, bottom=biz['positive'], color='tab:olive')
+plt.bar(house.index, height=house['negative']+biz['negative'], width=40, bottom=biz['negative'], color='tab:olive')
+plt.bar(gov.index, height=gov['positive']+house['positive']+biz['positive'], width=40, bottom=house['positive']+biz['negative'], color='blue')
+plt.bar(gov.index, height=gov['negative']+house['negative']+biz['negative'], width=40, bottom=house['negative']+biz['negative'], color='blue')
+'''
+'''
+plt.figure(figsize=(16,8))
+
+
+plt.bar(biz.index, biz['positive'], width=40, color='skyblue')
+plt.bar(gov.index, height=gov['positive']+biz['positive'], width=40, bottom=biz['positive'], color='blue')
+plt.bar(house.index, height=house['positive']+biz['positive']+gov['positive'], width=40, bottom=biz['positive']+gov['positive'], color='tab:olive')
+
+plt.bar(biz.index, biz['negative'], width=40, color='skyblue')
+plt.bar(gov.index, height=gov['negative']+biz['negative'], width=40, bottom=biz['negative'], color='blue')
+plt.bar(house.index, height=house['negative']+biz['negative']+gov['negative'], width=40, bottom=biz['negative']+gov['negative'], color='tab:olive')
+'''
