@@ -38,6 +38,7 @@
 
 ## 3. Top
 ## 4. Depression 
+- mark-to-market accounting: fair value asset pricing for assets with constantly changing values (mark in book should reflect current market conditions)
 ## 5. Beautiful Deleveraging 
 ## 6. Pushing on a String 
 ## 7. Normalization 
@@ -47,4 +48,5 @@
 # References: 
 ---
 ### Online 
-- [Long Position](https://www.investopedia.com/terms/l/long.asp)
+- [Investopedia: Long Position](https://www.investopedia.com/terms/l/long.asp)
+- [Investopedia: Mark to Market (MTM)](https://www.investopedia.com/terms/m/marktomarket.asp)

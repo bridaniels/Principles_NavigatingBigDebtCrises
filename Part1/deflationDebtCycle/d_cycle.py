@@ -27,6 +27,71 @@ fred = Fred(api_key=api_key)
 default_start = '1960-01-01'
 default_end = '2021-10-01'
 
+class RANGE():  
+    def __init__(self, cycle_start, cycle_end, frequency='q'): 
+        '''
+        Parameters: 
+        -----------
+        frequency: str
+            'd' = daily
+            'w' = weekly
+            'bw' = biweekly
+            'm' = monthly
+            'q' = quarterly
+            'sa' = semiannual
+            'a' = annual
+        start + end: datetime or datetime-like str
+            '''
+        self.cycle_start = cycle_start
+        self.cycle_end = cycle_end
+        self.frequency = frequency
+
+    # BUBBLE = Debt Growth GREATER than Income Growth 
+    def bubble_range(self):
+        list = self.list_bubble_range()
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='a')
+        df = pd.DataFrame(df)
+        df['GDI yoy Growth'] = df['GDI'] / df['GDI'].shift(1,axis=0)
+        df['Debt yoy Growth'] = (df['ASTLL'] + df['ASTDSL']) / (df['ASTLL'].shift(1,axis=0) + df['ASTDSL'].shift(1,axis=0))
+        df['Income vs Debt yoy Change'] = df['GDI yoy Growth'] - df['Debt yoy Growth']
+        bubble_df = pd.DataFrame(df['Income vs Debt yoy Change'])
+        bubble_df = bubble_df[bubble_df['Income vs Debt yoy Change'] <= 0]
+        bubble_df.index = pd.to_datetime(bubble_df.index)
+        bubble_start = bubble_df.first_valid_index().strftime('%Y-%m-%d')
+        bubble_end = bubble_df.last_valid_index().strftime('%Y-%m-%d')
+        return bubble_start, bubble_end 
+
+    # LISTS    
+    def list_bubble_range(self, list_urls=False): 
+        tot_debt = []
+        # Billions Quarterly 
+        tot_debt.append('GDI') #Gross Domestic Income (Seasonally Adjusted )
+        # Millions Quarterly 
+        tot_debt.append('ASTLL') #All Sectors; Total Loans; Liability, Level 
+        tot_debt.append('ASTDSL') #All Sectors; Total Debt Securities; Liability, Level 
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
+        return tot_debt
+    def list_to_url(self, debt_list):
+        '''
+        debt_list: List[str]
+            - returned list from selected list function 
+        '''
+        for i in range(len(debt_list)): 
+            debt_list[i] = 'https://fred.stlouisfed.org/series/'+debt_list[i]
+        return debt_list
+
+
+# 2008 BUBBLE PARAMS
+start_2008 = '2001-01-01'
+end_2008 = '2015-01-01'
+bub = RANGE(start_2008, end_2008, 'a')
+bubble_start_08, bubble_end_08 = bub.bubble_range()
+print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
+
+
 
 
 # Pull headers into list to be added to DF 
@@ -95,6 +160,18 @@ class DATA_LISTS():
         if list_urls is not False: 
             return self.list_to_url(tot_debt)
         return tot_debt
+    
+    def list_bubble_range(self, list_urls=False): 
+        tot_debt = []
+        # Billions Quarterly 
+        tot_debt.append('GDI') #Gross Domestic Income (Seasonally Adjusted )
+        # Millions Quarterly 
+        tot_debt.append('ASTLL') #All Sectors; Total Loans; Liability, Level 
+        tot_debt.append('ASTDSL') #All Sectors; Total Debt Securities; Liability, Level 
+        if list_urls is not False: 
+            return self.list_to_url(tot_debt)
+        return tot_debt
+
 
     def list_to_url(self, debt_list):
         '''
@@ -104,10 +181,6 @@ class DATA_LISTS():
         for i in range(len(debt_list)): 
             debt_list[i] = 'https://fred.stlouisfed.org/series/'+debt_list[i]
         return debt_list
-
-
-
-        
 
 
 
@@ -130,6 +203,7 @@ class BUBBLE(DATA_LISTS):
         self.frequency = frequency
         self.start = start 
         self.end = end
+
 
     def df_debt_to_gdp(self): 
         list = self.list_debt_to_gdp()
