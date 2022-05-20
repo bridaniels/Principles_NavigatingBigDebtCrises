@@ -48,7 +48,7 @@ class RANGE():
 
     # BUBBLE = Debt Growth GREATER than Income Growth 
     def bubble_range(self):
-        list = self.list_bubble_range()
+        list = self.list_gdi_debt()
         df = {}
         for i in range(len(list)): 
             df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='a')
@@ -63,8 +63,17 @@ class RANGE():
         bubble_end = bubble_df.last_valid_index().strftime('%Y-%m-%d')
         return bubble_start, bubble_end 
 
+    def all_cycle_ranges(self):
+        cycle_boundaries = []
+        bubble_start, bubble_end = self.bubble_range()
+        cycle_boundaries.append(bubble_start)
+        cycle_boundaries.append(bubble_end)
+
+
+        return cycle_boundaries
+
     # LISTS    
-    def list_bubble_range(self, list_urls=False): 
+    def list_gdi_debt(self, list_urls=False): 
         tot_debt = []
         # Billions Quarterly 
         tot_debt.append('GDI') #Gross Domestic Income (Seasonally Adjusted )
@@ -184,7 +193,7 @@ class DATA_LISTS():
 
 
 
-class BUBBLE(DATA_LISTS): 
+class DATA_DF(DATA_LISTS): 
     def __init__(self, frequency='q', start=default_start, end=default_end) -> None:
         '''
         Parameters: 
@@ -267,13 +276,29 @@ class BUBBLE(DATA_LISTS):
     
 
 
-class BUBBLE_PLOTTING(BUBBLE):
-    def __init__(self, frequency='q', start=default_start, end=default_end) -> None:
+class PLOTTING(DATA_DF):
+    def __init__(self, frequency='q', start=default_start, end=default_end, cycle_lines=None) -> None:
         super().__init__(frequency, start, end)
+        '''
+        cycle_lines
+        ===========
+        call RANGE().all_cycle_ranges()
+        will give you list of cycle boundaries 
+        '''
+        
+        # if cycle_lines is not None: 
+            # i don't think you need this but you might? 
+        self.cycle_lines = cycle_lines
+
 
     def plot_debt_to_gdp(self): 
         yoy = self.df_debt_to_gdp()
         fig,ax = plt.subplots(figsize=(19,8))
+
+        if self.cycle_lines is not None:
+            for idx in range(len(self.cycle_lines)):
+                ax.axvline(self.cycle_lines[idx], linewidth=0.5, linestyle='--', color='gray', alpha=0.2)
+
 
         ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue')
         ax.bar(yoy.index, yoy.yoy_change, width=50, color='tab:olive')
@@ -336,11 +361,17 @@ class BUBBLE_PLOTTING(BUBBLE):
 
 
 
+"""
+CYCLE BOUNDARIES: 
+IN RANGE AND PLOTTING 
+========================
+range -> inbetween bubbles and list funciton s
+plotting -> added as init param -> inside first func`   
+"""
 
-'''
-CLEANUP: 
-
-
+"""
+CLEANUP
+========
 Debt Cycle as a Whole 
 1. Start with '08 for each step 
 2. Grab a few other smaller recessions -> same analysis 
@@ -357,7 +388,11 @@ Debt Cycle as a Whole
 03_top 
 
 
-'''
+Don't iterate through entire cycle to get cycle range boundaries 
+- would pull so much small data it would get icky and messy and you don't want that boooo
+- focus on individual cycles -> store them and identify full cycles later in a big graph 
+- do this separate from each indiivdual analyzation 
+"""
 
 
 
