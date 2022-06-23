@@ -5,6 +5,7 @@
 
 
 # **Part 1:** 
+- Roughly a 75% correlation between amount of inflation and amount of foreign debts 
 
 ### [Deflation Debt Cycle](Part1/deflationDebtCycle/)
 > 1. Early 

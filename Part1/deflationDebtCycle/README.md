@@ -1,11 +1,34 @@
 # **Classic Deflationary Debt Cycle:**
+---
+- Debt financed primarily in local currency -> Central bank able to print money in resolve 
+- Debt service costs rising beyond economies ability to service 
+- Deleveraging strategies put into place to safely and efficiently service debts neccessary to restabalize economy 
+
+> ### **Policy Maker Levers:** 
+> *to bring debt and debt service levels back in equilibrium*
+> ##### Deflationary 
+> 1. Austerity (spending less) 
+> 2. Debt Defaults/Restructurings
+> ##### Inflationary
+> 3. Central Bank "Printing Money" or Making Purchases/Providing Garuntees 
+> ##### Transfer of Wealth 
+> 4. Money and Credit from the "Haves" to the "Have Nots" 
+
+- Policy makers lower interest rates until they are so low they are no longer an effective tool 
+- Print Money? Ofc! Easiest path with the least resistance to short term economy 
+- Debt restructurings and austerity dominate - not balanced with economic stimulation 
 
 
 
+---
+---
 # 1. [Early](01_early.ipynb)
+---
 - Debt NOT growing faster than incomes
 - Debt growth from financing interests that simultaneously increase incomes 
 - **Sustainable Growth** while income growth can service growing debts 
+
+
 
 ---
 ---
