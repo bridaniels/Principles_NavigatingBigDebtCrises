@@ -62,6 +62,23 @@ class RANGE():
         bubble_start = bubble_df.first_valid_index().strftime('%Y-%m-%d')
         bubble_end = bubble_df.last_valid_index().strftime('%Y-%m-%d')
         return bubble_start, bubble_end 
+    
+
+
+    def top_range(self): 
+        list = self.list_fed_funds()
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='q')]
+        df = pd.DataFrame(df)
+        df['Quarterly Rate Change'] = df['DFF'] - df['DFF'].shift(4,axis=0)
+
+        # if 2 go up in a row -> add to range 
+        # whenever 2 go down -> stop 
+
+
+
+
 
     def all_cycle_ranges(self):
         cycle_boundaries = []
@@ -83,6 +100,13 @@ class RANGE():
         if list_urls is not False: 
             return self.list_to_url(tot_debt)
         return tot_debt
+    def list_fed_funds(self, list_urls=False): 
+        fed_fund = []
+        fed_fund.append('DFF')
+        if list_urls is not False: 
+            return self.list_to_url(fed_fund)
+        return fed_fund
+
     def list_to_url(self, debt_list):
         '''
         debt_list: List[str]
@@ -99,6 +123,8 @@ end_2008 = '2015-01-01'
 bub = RANGE(start_2008, end_2008, 'a')
 bubble_start_08, bubble_end_08 = bub.bubble_range()
 print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
+top_start_08, top_end_08 = bub.top_range()
+print("2008 Top Start: {}\n 2008 Top End: {}".format(top_start_08, top_end_08))
 
 
 
