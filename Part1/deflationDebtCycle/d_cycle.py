@@ -300,11 +300,11 @@ class PLOTTING(DATA_DF):
                 ax.axvline(self.cycle_lines[idx], linewidth=0.5, linestyle='--', color='gray', alpha=0.2)
 
 
-        ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue')
+        ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue', linewidth=0.9)
         ax.bar(yoy.index, yoy.yoy_change, width=50, color='tab:olive')
         ax.fill_between(yoy.index, 0, yoy['yoy_change'], color='green', alpha=0.3)
         ax.axhline(y=0, linewidth=0.5, linestyle='--')
-        ax.yaxis.set_major_formatter(PercentFormatter())
+        ax.yaxis.set_major_formatter(PercentFormatter(1))
         ax.set_ylabel('YOY Change in Debt to GDP', fontsize=12)
         ax.legend(loc=2)
 
@@ -314,6 +314,24 @@ class PLOTTING(DATA_DF):
         ax2.set_ylabel('Total Debt to GDP %', fontsize=12)
         ax2.legend(loc=1)
         ax2.set_title('US Debt to GDP', fontsize=20)
+    def plot_bubble_debt_to_gdp(self): 
+        yoy = self.df_debt_to_gdp()
+        yoy['three_yr_change'] = yoy['pcnt_GDP'] - yoy['pcnt_GDP'].shift(12,axis=0)
+        yoy['two_yr_change'] = yoy['pcnt_GDP'] - yoy['pcnt_GDP'].shift(8,axis=0)
+        two_three = yoy.copy(deep=True)
+        two_three = two_three.iloc[::4, :]
+
+        fig,ax=plt.subplots(figsize=(16,8))
+
+        ax.bar(two_three.index, two_three['three_yr_change'], label='3yr Change', width=50, color='g')
+        ax.bar(two_three.index, two_three['two_yr_change'], label='2yr Change', width=50, color='tab:olive')
+        ax.axhline(y=0.2, linewidth=0.5, linestyle='--', color='r')
+        ax.axhline(y=0.25, linewidth=0.5, linestyle='--', color='r')
+        ax.fill_between(two_three.index, 0.2, 0.25, color='r', alpha=0.2)
+        ax.yaxis.set_major_formatter(PercentFormatter(1))
+        ax.set_ylabel('Change in Debt to GDP', fontsize=12)
+        ax.legend(loc=2)
+        ax.set_title('Change in Debt to GDP Ratio During a Bubble', fontsize=20)
 
     def plot_category_debt(self):
         biz = self.df_business_debt()

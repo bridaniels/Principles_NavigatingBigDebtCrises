@@ -97,7 +97,7 @@
 ---
 
 > ### **Long  |  Levered  |  Overpriced**
-> #### Typically occur as Central Bank attempts to tighten policy and interest rates rise 
+> #### Occur when Central Bank attempts to tighten policy and interest rates rise 
 > ---
 > #### Cycle: *Wealth Falls -> Income Falls -> Credit-Worthyness Weakens -> Lending Constricted -> Spending Drops -> Investments Fall -> Selling Out -> Less Appealing to Buy -> ...*
 > --- 
@@ -145,3 +145,4 @@ ___
 ### Online 
 - [Investopedia: Long Position](https://www.investopedia.com/terms/l/long.asp)
 - [Investopedia: Mark to Market (MTM)](https://www.investopedia.com/terms/m/marktomarket.asp)
+- [McKinsey & Company: Debt and Deleveraging: The Global Credit Bubble and Its Economic Consequences](https://www.mckinsey.com/featured-insights/employment-and-growth/debt-and-deleveraging)
