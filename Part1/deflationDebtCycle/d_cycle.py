@@ -63,19 +63,25 @@ class RANGE():
         bubble_end = bubble_df.last_valid_index().strftime('%Y-%m-%d')
         return bubble_start, bubble_end 
     
-
-
     def top_range(self): 
         list = self.list_fed_funds()
         df = {}
         for i in range(len(list)): 
-            df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='q')]
+            df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='q')
         df = pd.DataFrame(df)
-        df['Quarterly Rate Change'] = df['DFF'] - df['DFF'].shift(4,axis=0)
+        df['Yearly Rate Change'] = df['DFF'] - df['DFF'].shift(4,axis=0)
+        df['Quarterly Rate Change'] = df['DFF'] - df['DFF'].shift(1,axis=0)
+        df.index = pd.to_datetime(df.index)
 
-        # if 2 go up in a row -> add to range 
-        # whenever 2 go down -> stop 
-
+        # BOUNDARIES ARE ARBITRARY NUMBERS I PICKED OUT VIA 2008 DATA 
+        tighten_df = df.loc[df['Yearly Rate Change'] > 1]
+        top_start = tighten_df.first_valid_index().strftime('%Y-%m-%d')
+        plateau_df = df.loc[df['Yearly Rate Change'] < -2]
+        # works with end of bubble 
+        top_end = plateau_df.last_valid_index().strftime('%Y-%m-%d')
+        # before end of bubble
+        #top_end = plateau_df['Yearly Rate Change'].idxmax().strftime('%Y-%m-%d')
+        return top_start, top_end
 
 
 
@@ -106,6 +112,13 @@ class RANGE():
         if list_urls is not False: 
             return self.list_to_url(fed_fund)
         return fed_fund
+    def list_t_bonds(self, list_urls=False): 
+        t_bonds = ['DGS2', 'DGS5', 'DGS10', 'DGS20', 'DGS30']
+        if list_urls is not False: 
+            return self.list_to_url(fed_fund)
+        return t_bonds
+
+    
 
     def list_to_url(self, debt_list):
         '''
@@ -124,7 +137,7 @@ bub = RANGE(start_2008, end_2008, 'a')
 bubble_start_08, bubble_end_08 = bub.bubble_range()
 print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
 top_start_08, top_end_08 = bub.top_range()
-print("2008 Top Start: {}\n 2008 Top End: {}".format(top_start_08, top_end_08))
+print("2008 Top Start: {}\n2008 Top End: {}".format(top_start_08, top_end_08))
 
 
 
@@ -206,6 +219,12 @@ class DATA_LISTS():
         if list_urls is not False: 
             return self.list_to_url(tot_debt)
         return tot_debt
+
+    def list_t_bond(self, list_urls=False): 
+        t_bond = ['DGS2', 'DGS5', 'DGS10', 'DGS20', 'DGS30']
+        if list_urls is not False: 
+            return self.list_to_url(t_bond)
+        return t_bond 
 
 
     def list_to_url(self, debt_list):
@@ -299,6 +318,14 @@ class DATA_DF(DATA_LISTS):
         g.columns=['GDP']
         g['GDP'] = g['GDP']*1000
         return g 
+
+    def df_t_bond(self): 
+        list = self.list_t_bond()
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        return df    
     
 
 
@@ -401,6 +428,43 @@ class PLOTTING(DATA_DF):
             ax2.yaxis.set_major_formatter(formatterTMilly)
             ax2.set_ylabel('Adjusted Real GDP', fontsize=12)
             ax2.legend(loc=1, borderpad=1, fontsize=10)
+
+    def plot_t_bond_maturity(self): 
+        df = self.df_t_bond()
+
+        plt.figure(figsize=(16,8))
+
+        plt.plot(df['DGS30'], label='30-Year')
+        plt.plot(df['DGS20'], label='20-Year')
+        plt.plot(df['DGS10'], label='10-Year')
+        plt.plot(df['DGS5'], label='5-Year')
+        plt.plot(df['DGS2'], label='2-Year')
+
+        plt.title("U.S. Treasury Securities Market Yield (Constant Maturity)", fontsize=20)
+        plt.ylabel("Market Yield (in percent", fontsize=12)
+        plt.legend(loc=2)
+        plt.grid(True, linestyle='--', alpha=0.9)
+    def plot_SR_LR(self): 
+        df = self.df_t_bond()
+        df['SR - LR'] = df['DGS2'] - df['DGS30']
+        df['SR/LR'] = df['DGS2'] / df['DGS30']
+        even_yield = [i for i, val in enumerate(df['SR/LR']) if val==1]
+        inverted = [i for i, val in enumerate(df['SR/LR']) if val>1]
+
+        fig, ax = plt.subplots(figsize=(16,8))
+
+        ax.plot(df['SR - LR'], label='SR - LR', color='blue')
+        ax.set_ylabel('SR - LR', fontsize=12, color='blue')
+        ax.legend(loc=2)
+
+        ax2 = ax.twinx()
+        ax2.plot(df['SR/LR'], label='SR / LR', color='purple')
+        ax2.plot(df['SR/LR'][even_yield], linestyle='none', color='red', marker='o', label='SR = LR')
+        ax2.plot(df['SR/LR'][inverted], linestyle='none', color='yellow', marker='o', label='inverted')
+        ax2.set_ylabel('SR / LR', fontsize=12, color='purple')
+        ax2.legend(loc=1)
+
+        ax2.set_title('YIELD CURVE', fontsize=20)
 
 
 
