@@ -466,11 +466,11 @@ class PLOTTING(DATA_DF):
 
         plt.figure(figsize=(16,8))
 
-        plt.plot(df['DGS30'], label='30-Year')
-        plt.plot(df['DGS20'], label='20-Year')
-        plt.plot(df['DGS10'], label='10-Year')
-        plt.plot(df['DGS5'], label='5-Year')
-        plt.plot(df['DGS2'], label='2-Year')
+        plt.plot(df['DGS30'], label='30-Year Bond', color='mediumblue')
+        plt.plot(df['DGS20'], label='20-Year Bond', color='royalblue')
+        plt.plot(df['DGS10'], label='10-Year Note', color='limegreen')
+        plt.plot(df['DGS5'], label='5-Year Note', color='springgreen')
+        plt.plot(df['DGS2'], label='2-Year Note', color='green')
 
         plt.title("U.S. Treasury Securities Market Yield (Constant Maturity)", fontsize=20)
         plt.ylabel("Market Yield (in percent", fontsize=12)
@@ -523,10 +523,10 @@ class PLOTTING(DATA_DF):
 
         fig,ax = plt.subplots(figsize=(20,8))
         
-        ax.plot(df2['2yr_Change'], label='2yr Bond Change', color='green', linestyle='--', alpha=0.5)
-        ax.plot(df2['10yr_Change'], label='10yr Bond Change', color='springgreen', linestyle='--', alpha=0.5)
-        ax.plot(df2['30yr_Change'], label='30yr Bond Change', color='limegreen', linestyle='--', alpha=0.5)
-        ax.axvline(short_max, linestyle='--', color='green', alpha=0.5, label='Short Rate Peak')
+        ax.plot(df2['2yr_Change'], label='2yr Note Change', color='green', linestyle='--', alpha=0.5)
+        ax.plot(df2['10yr_Change'], label='10yr Note Change', color='springgreen', linestyle='--', alpha=0.5)
+        ax.plot(df2['30yr_Change'], label='30yr Bond Change', color='limegreen', linestyle='-', alpha=0.5)
+        ax.axvline(short_max, linestyle='-.', color='green', alpha=0.5, label='Short Rate Peak')
         ax.legend(loc=2)
         ax.tick_params(rotation=50)
         ax.set_ylabel('U.S. T-Bond Changes', color='forestgreen', fontsize=12)
@@ -536,7 +536,7 @@ class PLOTTING(DATA_DF):
         ax2.plot(df['Income_Change'], label='Income Change', color='skyblue')
         ax2.plot(df['Credit_Change'], label='Change in Bad Credit', color='cornflowerblue')
         ax2.plot(df['GDP_Change'], label='GDP Change', color='orange', linewidth=3)
-        ax2.axvline(market_max, color='blue', linestyle='--', alpha=0.7, label='Market Peak')
+        ax2.axvline(market_max, color='blue', linestyle='-.', alpha=0.7, label='Market Peak')
 
         ax2.tick_params(rotation=50)
         ax2.set_ylabel('Asset Price Changes', color='mediumblue', fontsize=12)
