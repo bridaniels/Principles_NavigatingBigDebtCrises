@@ -27,6 +27,8 @@ fred = Fred(api_key=api_key)
 default_start = '1960-01-01'
 default_end = '2021-10-01'
 
+
+
 class RANGE():  
     def __init__(self, cycle_start, cycle_end, frequency='q'): 
         '''
@@ -129,7 +131,6 @@ class RANGE():
             debt_list[i] = 'https://fred.stlouisfed.org/series/'+debt_list[i]
         return debt_list
 
-
 # 2008 BUBBLE PARAMS
 start_2008 = '2001-01-01'
 end_2008 = '2015-01-01'
@@ -138,6 +139,7 @@ bubble_start_08, bubble_end_08 = bub.bubble_range()
 print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
 top_start_08, top_end_08 = bub.top_range()
 print("2008 Top Start: {}\n2008 Top End: {}".format(top_start_08, top_end_08))
+
 
 
 
@@ -225,6 +227,11 @@ class DATA_LISTS():
         if list_urls is not False: 
             return self.list_to_url(t_bond)
         return t_bond 
+    def list_equity_price_index(self,list_urls=False): 
+        equity = ['NASDAQCOM']
+        if list_urls is not False: 
+            return self.list_to_url(equity)
+        return equity
 
 
     def list_to_url(self, debt_list):
@@ -326,6 +333,14 @@ class DATA_DF(DATA_LISTS):
             df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
         df = pd.DataFrame(df)
         return df    
+    def df_equity_price_index(self): 
+        list = self.list_equity_price_index()
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+        return df 
     
 
 
@@ -442,6 +457,7 @@ class PLOTTING(DATA_DF):
 
         plt.title("U.S. Treasury Securities Market Yield (Constant Maturity)", fontsize=20)
         plt.ylabel("Market Yield (in percent", fontsize=12)
+        plt.tick_params(rotation=50)
         plt.legend(loc=2)
         plt.grid(True, linestyle='--', alpha=0.9)
     def plot_SR_LR(self): 
@@ -454,6 +470,8 @@ class PLOTTING(DATA_DF):
         fig, ax = plt.subplots(figsize=(16,8))
 
         ax.plot(df['SR - LR'], label='SR - LR', color='blue')
+        ax.tick_params(rotation=50)
+        ax.grid(True, linestyle='--', alpha=0.9)
         ax.set_ylabel('SR - LR', fontsize=12, color='blue')
         ax.legend(loc=2)
 
@@ -465,6 +483,17 @@ class PLOTTING(DATA_DF):
         ax2.legend(loc=1)
 
         ax2.set_title('YIELD CURVE', fontsize=20)
+    def plot_equity_price_index(self): 
+        df = self.df_equity_price_index()
+
+        fig,ax = plt.subplots(figsize=(16,8))
+
+        ax.plot(df['NASDAQCOM'], label='NASDAQ Composite Index', color='green')
+        ax.set_ylabel('Index Feb 5, 1971 = 100', fontsize=12, color='green')
+        ax.legend(loc=2)
+        ax.tick_params(rotation=50)
+        ax.grid(True, linestyle='--', alpha=0.9)
+        ax.set_title('Equity Price Index')
 
 
 
@@ -528,77 +557,3 @@ Don't iterate through entire cycle to get cycle range boundaries
     # change to dictionary -> dataframe data structure not working properly 
     # would need to sort positive vs. negative values in the DF to organize properly
         # then graph the positive values separate from the negative 
-'''
-g = d.df_add_gdp()
-house = d.df_household_debt()
-gov = d.df_government_debt()
-biz = d.df_business_debt()
-
-
-# Calc Percent of GDP
-house['pcnt'] = house['debt_sum'] / g['GDP']
-gov['pcnt'] = gov['debt_sum'] / g['GDP']
-biz['pcnt'] = biz['debt_sum'] / g['GDP']
-
-# Calc YOY Change 
-house['yoy'] = house['pcnt'] - house['pcnt'].shift(4,axis=0)
-gov['yoy'] = gov['pcnt'] - gov['pcnt'].shift(4,axis=0)
-biz['yoy'] = biz['pcnt'] - biz['pcnt'].shift(4,axis=0)
-
-# .fillna(0)
-house = house.fillna(0)
-gov = gov.fillna(0)
-biz = biz.fillna(0)
-
-def separate(data): 
-    pos = len(data) * [0]
-    neg = len(data) * [0]
-    #headers = data.columns 
-    for idx, number in enumerate(data['yoy']):
-        if number < 0: 
-            neg[idx] = number
-            pos[idx] = None
-        else: 
-            pos[idx] = number
-            neg[idx] = None
-    data['negative'] = neg
-    data['positive'] = pos
-    return data  
-
-house = separate(house)
-gov = separate(gov)
-biz = separate(biz)
-
-house = house[['negative', 'positive']].copy()
-house.rename(columns= {'negative':'neg_house', 'positive':'pos_house'},inplace=True)
-gov = gov[['negative', 'positive']].copy()
-gov.rename(columns={'negative':'neg_gov', 'positive':'pos_gov'}, inplace=True)
-biz = biz[['negative', 'positive']].copy()
-biz.rename(columns={'negative':'neg_biz', 'positive':'pos_biz'}, inplace=True)
-
-cat = pd.concat([house,gov,biz], axis=1, join='outer')
-
-'''
-# PLOTTING ATTEMPTS
-'''
-plt.figure(figsize=(16,8))
-
-plt.bar(biz.index, biz['positive'], width=40, color='skyblue')
-plt.bar(biz.index, biz['negative'], width=40, color='skyblue')
-plt.bar(house.index, height=house['positive']+biz['positive'], width=40, bottom=biz['positive'], color='tab:olive')
-plt.bar(house.index, height=house['negative']+biz['negative'], width=40, bottom=biz['negative'], color='tab:olive')
-plt.bar(gov.index, height=gov['positive']+house['positive']+biz['positive'], width=40, bottom=house['positive']+biz['negative'], color='blue')
-plt.bar(gov.index, height=gov['negative']+house['negative']+biz['negative'], width=40, bottom=house['negative']+biz['negative'], color='blue')
-'''
-'''
-plt.figure(figsize=(16,8))
-
-
-plt.bar(biz.index, biz['positive'], width=40, color='skyblue')
-plt.bar(gov.index, height=gov['positive']+biz['positive'], width=40, bottom=biz['positive'], color='blue')
-plt.bar(house.index, height=house['positive']+biz['positive']+gov['positive'], width=40, bottom=biz['positive']+gov['positive'], color='tab:olive')
-
-plt.bar(biz.index, biz['negative'], width=40, color='skyblue')
-plt.bar(gov.index, height=gov['negative']+biz['negative'], width=40, bottom=biz['negative'], color='blue')
-plt.bar(house.index, height=house['negative']+biz['negative']+gov['negative'], width=40, bottom=biz['negative']+gov['negative'], color='tab:olive')
-'''
