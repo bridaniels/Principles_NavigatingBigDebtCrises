@@ -232,7 +232,11 @@ class DATA_LISTS():
         if list_urls is not False: 
             return self.list_to_url(equity)
         return equity
-
+    def list_asset_price_changes(self, list_urls=False): 
+        list = ['NASDAQCOM', 'GDI', 'DRCCLACBS', 'GDP']
+        if list_urls is not False: 
+            return self.list_to_url(list)
+        return list
 
     def list_to_url(self, debt_list):
         '''
@@ -332,6 +336,7 @@ class DATA_DF(DATA_LISTS):
         for i in range(len(list)): 
             df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
         df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
         return df    
     def df_equity_price_index(self): 
         list = self.list_equity_price_index()
@@ -341,7 +346,19 @@ class DATA_DF(DATA_LISTS):
         df = pd.DataFrame(df)
         df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
         return df 
-    
+    def df_asset_price_changes(self): 
+        list = self.list_asset_price_changes()
+        df = {} 
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency='q')
+        df =  pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+        df['Equity_Change'] = (df['NASDAQCOM']-df['NASDAQCOM'].shift(1,axis=0)) / df['NASDAQCOM']
+        df['Income_Change'] = (df['GDI'] - df['GDI'].shift(1,axis=0)) / df['GDI']
+        df['Credit_Change'] = (df['DRCCLACBS'] - df['DRCCLACBS'].shift(1,axis=0)) / df['DRCCLACBS']
+        df['GDP_Change'] = (df['GDP'] - df['GDP'].shift(1,axis=0)) / df['GDP']
+        return df
+
 
 
 class PLOTTING(DATA_DF):
@@ -494,7 +511,39 @@ class PLOTTING(DATA_DF):
         ax.tick_params(rotation=50)
         ax.grid(True, linestyle='--', alpha=0.9)
         ax.set_title('Equity Price Index')
+    def plot_asset_price_changes(self): 
+        df = self.df_asset_price_changes()
+        df2 = self.df_t_bond()
+        df2['2yr_Change'] = (df2['DGS2']- df2['DGS2'].shift(1,axis=0)) / df2['DGS2']
+        df2['10yr_Change'] = (df2['DGS10']-df2['DGS10'].shift(1,axis=0)) / df2['DGS10']
+        df2['30yr_Change'] = (df2['DGS30']-df2['DGS30'].shift(1,axis=0)) / df2['DGS30']
 
+        short_max = df2['DGS2'].idxmax()
+        market_max = df['NASDAQCOM'].idxmax()
+
+        fig,ax = plt.subplots(figsize=(20,8))
+        
+        ax.plot(df2['2yr_Change'], label='2yr Bond Change', color='green', linestyle='--', alpha=0.5)
+        ax.plot(df2['10yr_Change'], label='10yr Bond Change', color='springgreen', linestyle='--', alpha=0.5)
+        ax.plot(df2['30yr_Change'], label='30yr Bond Change', color='limegreen', linestyle='--', alpha=0.5)
+        ax.axvline(short_max, linestyle='--', color='green', alpha=0.5, label='Short Rate Peak')
+        ax.legend(loc=2)
+        ax.tick_params(rotation=50)
+        ax.set_ylabel('U.S. T-Bond Changes', color='forestgreen', fontsize=12)
+
+        ax2 = ax.twinx()
+        ax2.plot(df['Equity_Change'], label='NASDAQ Composite Index Change', linewidth=3)
+        ax2.plot(df['Income_Change'], label='Income Change', color='skyblue')
+        ax2.plot(df['Credit_Change'], label='Change in Bad Credit', color='cornflowerblue')
+        ax2.plot(df['GDP_Change'], label='GDP Change', color='orange', linewidth=3)
+        ax2.axvline(market_max, color='blue', linestyle='--', alpha=0.7, label='Market Peak')
+
+        ax2.tick_params(rotation=50)
+        ax2.set_ylabel('Asset Price Changes', color='mediumblue', fontsize=12)
+        ax2.legend(loc=1)
+        ax2.set_title('Impacts of Asset Price Changes', fontsize=20)
+        
+        
 
 
 
@@ -514,6 +563,9 @@ Debt Cycle as a Whole
 2. Grab a few other smaller recessions -> same analysis 
 3. Resize each dataset to fit onto the same X-Axis
     - differences/similarities in the timelines? 
+
+FILL_BETWEENX(Y, X,X....)
+y = np.arange(min, max) -> basically parameters of the y axis 
 
 01_early
 - do whole cycle overall analysis 
