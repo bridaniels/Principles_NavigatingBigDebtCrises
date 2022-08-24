@@ -25,7 +25,7 @@ fred = Fred(api_key=api_key)
 
 # DEFAULT DATE RANGE
 default_start = '1960-01-01'
-default_end = '2021-10-01'
+default_end = '2019-10-01'
 
 
 
@@ -133,7 +133,7 @@ class RANGE():
 
 # 2008 BUBBLE PARAMS
 start_2008 = '2001-01-01'
-end_2008 = '2015-01-01'
+end_2008 = '2012-01-01'
 bub = RANGE(start_2008, end_2008, 'a')
 bubble_start_08, bubble_end_08 = bub.bubble_range()
 print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
@@ -362,27 +362,13 @@ class DATA_DF(DATA_LISTS):
 
 
 class PLOTTING(DATA_DF):
-    def __init__(self, frequency='q', start=default_start, end=default_end, cycle_lines=None) -> None:
+    def __init__(self, frequency='q', start=default_start, end=default_end) -> None:
         super().__init__(frequency, start, end)
-        '''
-        cycle_lines
-        ===========
-        call RANGE().all_cycle_ranges()
-        will give you list of cycle boundaries 
-        '''
-        
-        # if cycle_lines is not None: 
-            # i don't think you need this but you might? 
-        self.cycle_lines = cycle_lines
 
 
     def plot_debt_to_gdp(self): 
         yoy = self.df_debt_to_gdp()
         fig,ax = plt.subplots(figsize=(19,8))
-
-        if self.cycle_lines is not None:
-            for idx in range(len(self.cycle_lines)):
-                ax.axvline(self.cycle_lines[idx], linewidth=0.5, linestyle='--', color='gray', alpha=0.2)
 
 
         ax.plot(yoy.index, yoy.yoy_change, label='YOY GDP Change', color='skyblue', linewidth=0.9)
@@ -546,15 +532,6 @@ class PLOTTING(DATA_DF):
         
 
 
-
-"""
-CYCLE BOUNDARIES: 
-IN RANGE AND PLOTTING 
-========================
-range -> inbetween bubbles and list funciton s
-plotting -> added as init param -> inside first func`   
-"""
-
 """
 CLEANUP
 ========
@@ -570,11 +547,15 @@ y = np.arange(min, max) -> basically parameters of the y axis
 01_early
 - do whole cycle overall analysis 
 - intro to debt cycle 
+- add cycle lines
 02_bubble
 - shade out other parts of the cycle on graph so you can kinda see the whole thing
     - focus on the 'bubble' part 
 - % change in numbers qoq not yoy -> too short a timespan 
+- ADD YIELD CURVE 
 03_top 
+- 
+-
 
 
 Don't iterate through entire cycle to get cycle range boundaries 
@@ -582,24 +563,6 @@ Don't iterate through entire cycle to get cycle range boundaries
 - focus on individual cycles -> store them and identify full cycles later in a big graph 
 - do this separate from each indiivdual analyzation 
 """
-
-
-
-#lol = DATA_LISTS()
-#lolly = lol.list_household_debt()
-#lolly = lol.list_government_debt(list_urls=True)
-#print(lolly)
-#print(lolly)
-
-#bub = BUBBLE()
-#k = bub.df_household_debt()
-#print(k.tail(20))
-
-#plotty = BUBBLE_PLOTTING()
-#debty = plotty.plot_category_debt()
-#debty = plotty.plot_debt_vs_gdp()
-#debty
-
 
 
 # stacked bar chart work 
