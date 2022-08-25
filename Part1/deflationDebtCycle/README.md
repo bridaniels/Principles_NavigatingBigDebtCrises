@@ -56,7 +56,6 @@
 ---
 # 3. [Top](03_top.ipynb)
 ---
-- Most Vulnerable at the Top 
 
 > ### **Long  |  Levered  |  Overpriced**
 > #### Occur when Central Bank attempts to tighten policy and interest rates rise 
@@ -64,18 +63,6 @@
 > #### Cycle: *Wealth Falls -> Income Falls -> Credit-Worthyness Weakens -> Lending Constricted -> Spending Drops -> Investments Fall -> Selling Out -> Less Appealing to Buy -> ...*
 > --- 
 
-- Asset prices fall and create negative "wealth effects" 
-- Riskiest investments begin to fall through the cracks
-- Lenders raise standards and the credit spreads widen 
-- Short rates rise and narrow the spread between long rates 
-    - eliminating extra interest rate earned for lending long term rather than short term 
-    - Yield curve flattens or inverts (Short Rates Higher than Long Rates)
-- Holding cash becomes more attractive due to rising short term interest rates 
-    - further raises interest rate used to discount the future cash flows -> weakening riskier asset prices and slowly lending 
-    - items bought on credit are now more expensive 
-- Short rates peak a few months prior to the top in the market 
-- More leverage = bigger busts (takes less tighetning to burst the bubble)
-- Downturn dependent on market sector -> overall market is too broad to measure as a whole what the damage will look like 
 - Wealth effect of asset price movement has a bigger impact on economic growth rates than monetary policy 
 
 
