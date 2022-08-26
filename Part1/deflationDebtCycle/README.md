@@ -71,33 +71,12 @@ ___
 # 4. Depression 
 ___
 
-> ### Normal Recessions when Monetary Policy Still Effective: 
-> ##### Imbalance Between Amount of Money and the Need for It to Service Debt Rectified via Cutting Interest Rates So: 
-> - positive wealth effect 
-> - stimulate economic activity 
-> - ease debt-service burdens 
-> ### Depressions: 
 > ##### Risk-Free Interest Rates Can't Be Cut Further 
 > - Either Already Close to 0, or at 0 
 > - High Currency Outflows Raise the Floor of Interest-Rates Due to Credit/Currency Risk Considerations 
-> - Wide Credit Spreads (high-risk borrowers IR > risk-free rate)
-### Downward "Debt Death Spiral": 
-- Defaults and Austerity (deflation forces) Dominate 
-- Debt Defaults and Restructurings Hit Various Players (especially leveraged lenders - banks)
-- Risk-Free IR at the floor, and Risky IR rising making debts harder to service 
-- IR cuts only really help lending institutions with liquidity problems 
-- Stimulative/Inflationary forces of printing money not balancing out
-- Investors unwilling to lend + borrowers struggling to service debt = liquidity crisis 
-    - Who will you sell to? 
-- High ratio of `financial assets to money`
-- Typically stem a lot of lending withing *"Shadow Banking"* of new unregulated instruments 
-- **Solvency Problem:** accoriding to accounting standards the entity does not have enough capital to operate
-    - Resolve via providing equity capital or changing the accounting rules through monetary policy 
-    - AKA introduction of **Mark-to-Market Accounting**: fair value asset pricing for assets with changing values 
-- **Cash-Flow Problem:** entity does not have enough cash to meet obligations 
-    - can have adequate capital, but capital could be tied up in illiquid assets 
-    - immediate and severe 
-    - Resolve by fiscal/monetary policy with capital injections or garuntees that will resolve 
+> - Wide Credit Spreads 
+    - spread between high-risk borrowers IR and risk-free rate
+
 
 > #### Deleveraging Dynamic: 
 > - Driven by supply and demand of/relationships between **credit, money, goods, and services**

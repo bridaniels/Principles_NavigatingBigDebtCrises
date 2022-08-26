@@ -85,7 +85,8 @@ class RANGE():
         #top_end = plateau_df['Yearly Rate Change'].idxmax().strftime('%Y-%m-%d')
         return top_start, top_end
 
-
+    def depression_range(self): 
+        list = 'figure it out'
 
 
     def all_cycle_ranges(self):
@@ -134,7 +135,7 @@ class RANGE():
 # 2008 BUBBLE PARAMS
 start_2008 = '2001-01-01'
 end_2008 = '2012-01-01'
-bub = RANGE(start_2008, end_2008, 'a')
+bub = RANGE(start_2008, end_2008, 'a') #'a'=annual
 bubble_start_08, bubble_end_08 = bub.bubble_range()
 print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
 top_start_08, top_end_08 = bub.top_range()
@@ -536,7 +537,7 @@ class PLOTTING(DATA_DF):
 CLEANUP
 ========
 Debt Cycle as a Whole 
-1. Start with '08 for each step 
+1. Start with '08 for each step -> FIX DATES
 2. Grab a few other smaller recessions -> same analysis 
 3. Resize each dataset to fit onto the same X-Axis
     - differences/similarities in the timelines? 
