@@ -85,8 +85,33 @@ class RANGE():
         #top_end = plateau_df['Yearly Rate Change'].idxmax().strftime('%Y-%m-%d')
         return top_start, top_end
 
-    def depression_range(self): 
-        list = 'figure it out'
+    def depression_range(self):
+        # Nominal Growth Rate Above Nominal Interest Rate  
+        gdp_exp, gdp_deflation, nom_ir = self.list_nominal_ir_gdp()
+        
+        df = {}
+        list = gdp_exp
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='q')
+        df = pd.DataFrame(df)
+        df['GDP_EXP'] = df.sum(axis=1)
+
+        df2 = {}
+        list2 = gdp_deflation
+        for i in range(len(list2)): 
+            df2[list2[i]] = fred.get_series(list2[i], self.cycle_start, self.cycle_end, frequency='q')
+        df2 = pd.DataFrame(df2)
+        df2['GDP_DEFLATION'] = df2['A191RI1Q225SBEA'] * df2['GDP']
+
+        df3 = {}
+        list3 = nom_ir
+        for i in range(len(list3)): 
+            df3[list3[i]] = fred.get_series(list3[i], self.cycle_start, self.cycle_end, frequency='q')
+        df3 = pd.DataFrame(df3)
+        df3['NOM_IR'] = df3.sum(axis=1)
+
+        return df, df2, df3
+
 
 
     def all_cycle_ranges(self):
@@ -118,9 +143,18 @@ class RANGE():
     def list_t_bonds(self, list_urls=False): 
         t_bonds = ['DGS2', 'DGS5', 'DGS10', 'DGS20', 'DGS30']
         if list_urls is not False: 
-            return self.list_to_url(fed_fund)
+            return self.list_to_url(t_bonds)
         return t_bonds
-
+    def list_nominal_ir_gdp(self, list_urls=False):
+        # All Billions/Quarterly 
+        # [StateLocalGovExp, FederalGovExp, GovExp, NetExports, GrossPrivateBizInvestment, PersonalConsumptionExp(monthly)] 
+        gdp_exp = ['W079RCQ027SBEA','W019RCQ027SBEA', 'W068RCQ027SBEA', 'NETEXP', 'W987RC1Q027SBEA', 'PCE']
+        # [GDPImplicitPriceDeflator(%change, monthly), GDP]
+        gdp_deflation = ['A191RI1Q225SBEA', 'GDP']
+        nom_ir = ['DGS2']
+        if list_urls is not False: 
+            return self.list_to_url(ir_gdp)
+        return gdp_exp, gdp_deflation, nom_ir
     
 
     def list_to_url(self, debt_list):

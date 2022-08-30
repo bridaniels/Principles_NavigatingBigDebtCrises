@@ -78,6 +78,8 @@ ___
     - spread between high-risk borrowers IR and risk-free rate
 
 
+
+
 > #### Deleveraging Dynamic: 
 > - Driven by supply and demand of/relationships between **credit, money, goods, and services**
 > - Psychology plays only a small roll
