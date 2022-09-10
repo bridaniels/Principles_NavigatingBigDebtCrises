@@ -153,7 +153,7 @@ class RANGE():
         gdp_deflation = ['A191RI1Q225SBEA', 'GDP']
         nom_ir = ['DGS2']
         if list_urls is not False: 
-            return self.list_to_url(ir_gdp)
+            return self.list_to_url(gdp_exp, gdp_deflation, nom_ir)
         return gdp_exp, gdp_deflation, nom_ir
     
 
@@ -417,7 +417,7 @@ class PLOTTING(DATA_DF):
         ax2 = ax.twinx()
         ax2.plot(yoy.pcnt_GDP, label='%'+' of GDP', color='0.1', linewidth=2)
         ax2.yaxis.set_major_formatter(PercentFormatter(1))
-        ax2.set_ylabel('Total Debt to GDP %', fontsize=12)
+        ax2.set_ylabel(' Total Debt to GDP %', fontsize=12)
         ax2.legend(loc=1)
         ax2.set_title('US Debt to GDP', fontsize=20)
     def plot_bubble_debt_to_gdp(self): 
