@@ -7,6 +7,8 @@ import numpy as np
 import datetime as dt 
 
 import matplotlib.pyplot as plt 
+import seaborn as sns
+sns.set(style='darkgrid', context='talk', palette='rainbow')
 
 from typing import List
 
@@ -88,7 +90,9 @@ class RANGE():
     def depression_range(self):
         # Nominal Growth Rate Above Nominal Interest Rate  
         gdp_exp, gdp_deflation, nom_ir = self.list_nominal_ir_gdp()
-        
+        # All Billions/Quarterly 
+
+        # [StateLocalGovExp, FederalGovExp, GovExp, NetExports, GrossPrivateBizInvestment, PersonalConsumptionExp(monthly)] 
         df = {}
         list = gdp_exp
         for i in range(len(list)): 
@@ -96,6 +100,7 @@ class RANGE():
         df = pd.DataFrame(df)
         df['GDP_EXP'] = df.sum(axis=1)
 
+        # [GDPImplicitPriceDeflator(%change, monthly), GDP]
         df2 = {}
         list2 = gdp_deflation
         for i in range(len(list2)): 
@@ -103,6 +108,7 @@ class RANGE():
         df2 = pd.DataFrame(df2)
         df2['GDP_DEFLATION'] = df2['A191RI1Q225SBEA'] * df2['GDP']
 
+        #Nominal Interest Rate
         df3 = {}
         list3 = nom_ir
         for i in range(len(list3)): 
@@ -167,13 +173,56 @@ class RANGE():
         return debt_list
 
 # 2008 BUBBLE PARAMS
-start_2008 = '2001-01-01'
+start_2008 = '2002-01-01'
 end_2008 = '2012-01-01'
 bub = RANGE(start_2008, end_2008, 'a') #'a'=annual
 bubble_start_08, bubble_end_08 = bub.bubble_range()
 print("2008 Bubble Start: {}\n2008 Bubble End: {}".format(bubble_start_08, bubble_end_08))
 top_start_08, top_end_08 = bub.top_range()
 print("2008 Top Start: {}\n2008 Top End: {}".format(top_start_08, top_end_08))
+
+
+class GDP_MEASUREMENTS(): 
+    def __init__(self, cycle_start, cycle_end, frequency='q'):
+        '''
+        Parameters: 
+        -----------
+        frequency: str
+            'd' = daily
+            'w' = weekly
+            'bw' = biweekly
+            'm' = monthly
+            'q' = quarterly
+            'sa' = semiannual
+            'a' = annual
+        start + end: datetime or datetime-like str
+        '''
+        self.cycle_start = cycle_start
+        self.cycle_end = cycle_end
+        self.frequency = frequency
+    
+    def gdp_growth(self): 
+        list = ['GDP', 'fedfunds']
+        
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.cycle_start, self.cycle_end, frequency='q')
+        df = pd.DataFrame(df)
+        df['GDP_qoq_growth'] = df['GDP'] - df['GDP'].shift(1,axis=0)
+        df['GDP_change'] = (df['GDP'] - df['GDP'].shift(1,axis=0)) / df['GDP'].shift(1,axis=0)
+        df['fedfunds_change'] = (df['fedfunds'] - df['fedfunds'].shift(1,axis=0)) / df['fedfunds'].shift(1,axis=0)
+        df = df.dropna()
+
+        return df
+    
+    def gdp_recession(self): 
+        gdp_df = self.gdp_growth()
+        
+        recession = gdp_df[gdp_df['GDP_qoq_growth'] <= 0]
+        start_date = recession.first_valid_index().strftime('%Y-%m-%d')
+
+        return recession, start_date
+
 
 
 
@@ -564,6 +613,7 @@ class PLOTTING(DATA_DF):
         ax2.legend(loc=1)
         ax2.set_title('Impacts of Asset Price Changes', fontsize=20)
         
+
         
 
 
@@ -587,11 +637,25 @@ y = np.arange(min, max) -> basically parameters of the y axis
 - shade out other parts of the cycle on graph so you can kinda see the whole thing
     - focus on the 'bubble' part 
 - % change in numbers qoq not yoy -> too short a timespan 
-- ADD YIELD CURVE 
+- add yield curve
 03_top 
+- When/Where are LT rates not falling in tandem with ST rates = monetary policy flop 
+- Asset Price Changes (market peak too far out from short rate peak) - range issue 
+04_depression 
+- End Date for Depression Cycle
+- PUT CODE INTO .PY FILE
 - 
--
+- 
+- 
+- 
+05_beautiful_deleveraging
+- 
+- 
+06_pushing_string_normalization
+- 
+- 
 
+Make list_urls in range a completely separate function? 
 
 Don't iterate through entire cycle to get cycle range boundaries 
 - would pull so much small data it would get icky and messy and you don't want that boooo
