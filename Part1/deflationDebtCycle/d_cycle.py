@@ -614,6 +614,7 @@ class PLOTTING(DATA_DF):
         ax2.set_title('Impacts of Asset Price Changes', fontsize=20)
         
 
+
         
 
 
@@ -644,10 +645,10 @@ y = np.arange(min, max) -> basically parameters of the y axis
 04_depression 
 - End Date for Depression Cycle
 - PUT CODE INTO .PY FILE
-- 
-- 
-- 
-- 
+- NOMINAL SR
+- HOUSEHOLD DEBT AS % OF NET WORTH
+- US 3YR MONEY GROWTH
+- US NET WEALTH SHARES 
 05_beautiful_deleveraging
 - 
 - 
