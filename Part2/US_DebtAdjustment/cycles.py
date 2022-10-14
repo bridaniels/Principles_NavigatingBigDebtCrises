@@ -78,17 +78,80 @@ class DEBT_TO_GDP():
 
         fix, ax = plt.subplots(figsize=(18,6))
 
-        ax.set_title("Debt-to-GDP Ratio", fontsize=20)
+        ax.set_title("Debt-to-GDP Ratio", fontsize=25)
         sns.lineplot(x=df.index, y=df.debt_to_gdp, ax=ax)
         ax.set_ylabel("Debt-to-GDP Ratio", fontsize=12)
 
         ax.fill_betweenx(y=y, x1=start_recession01, x2=end_recession01, color='grey', alpha=0.3, label='2001 Recession')
-        ax.fill_betweenx(y=y, x1=start_bubble, x2=start_top, color='lightblue', alpha=0.3, label='2008 Emerging Bubble')
+        ax.fill_betweenx(y=y, x1=start_bubble, x2=start_top, color='lightblue', alpha=0.3, label='2008 Bubble')
         
         ax.legend(loc=2)
-
+        ax.annotate('1990s: Debt-to-GDP Ratio increased slightly. \n1993: Internet access avaliable to general public. \n2001: Recession (dot-com boom -> tightened monetary policy -> lowered IR down to ~1% and 9/11)',
+                xy = (0, -0.3),
+                xycoords='axes fraction', 
+                ha = 'left', 
+                va = 'center', 
+                fontsize=12)
         plt.xticks(rotation=50, fontsize=8)
         plt.show()
+
+class FEDFUNDS():
+    def __init__(self, start, end, frequency='q'): 
+        '''
+        Parameters: 
+        -----------
+        frequency: str
+            'd' = daily
+            'w' = weekly
+            'bw' = biweekly
+            'm' = monthly
+            'q' = quarterly
+            'sa' = semiannual
+            'a' = annual
+        start + end: datetime or datetime-like str
+        '''
+        self.start = start
+        self.end = end
+        self.frequency = frequency
+
+    def fedfunds_df(self): 
+        list = []
+        list.append('fedfunds')
+        
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+
+        return df
+
+    def plot_basicFEDFUNDS(self): 
+        df = self.fedfunds_df()
+        y = [df['fedfunds'].min(), df['fedfunds'].max()]
+
+        fig, ax = plt.subplots(figsize=(16,6))
+
+        ax.set_title("Fed Funds Rate", fontsize=25)
+        sns.lineplot(x=df.index, y=df.fedfunds, ax=ax)
+        ax.set_ylabel("Fed Funds Rate", fontsize=12)
+
+        ax.fill_betweenx(y=y, x1=start_recession01, x2=end_recession01, color='grey', alpha=0.3, label='2001 Recession')
+        ax.fill_betweenx(y=y, x1=start_bubble, x2=start_top, color='lightblue', alpha=0.3, label='2008 Bubble')
+        ax.legend(loc=2)
+
+        ax.annotate('2001 Recession: fed funds rate drops to 1% \n \
+            - Stimulated Borrowing and Spending (especially by households) \nTightening monetary policy begins in 2004 as credit markets begin to heat up', 
+                    xy = (0, -0.3), 
+                    xycoords='axes fraction', 
+                    ha = 'left', 
+                    va = 'center', 
+                    fontsize=10)
+        
+        plt.xticks(rotation=50, fontsize=10)
+        plt.show()
+    
+
 
 
 

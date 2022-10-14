@@ -65,4 +65,13 @@
 #### Fed's Easy Monetary Policy: 
 - Mortgage rates dropped to lows in 2003 (not seen since 1950s) 
     - stayed near lows well into bubble
-- Rates rose ~1.5% in 2005-2007 (Still High Leveraging Up)
+- Rates rose ~1.5% in 2005-2007 (Still High Leveraging Up)(begain raising in 2004)
+    - LT nominal IR roughly flat while LT real IR declined 
+- Bubble formed via asset price inflation via debt growth (Fed focuses on CPI inflation)
+- Inflation on the high end of normal at avg. 2-3.5%
+- Short term IR below inflation rate (negative short term borrowing costs 2000-2006)
+- **Noted excess in subprime market**
+
+#### Issues within Fannie Mae and Freddie Mac 
+- Treasury Secretary Henry Paulson gets President Bush's support in fall of 2006 to pass legislation for reforms 
+- Nothing happened till 2008
