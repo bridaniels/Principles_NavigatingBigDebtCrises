@@ -26,6 +26,7 @@ fred = Fred(api_key=api_key)
 
 # Default Date Ranges: 
 start_early90 = '1990-01-01'
+start_ltcm = '1998-01-01'
 start_recession01 = '2001-01-01'
 end_recession01 = '2001-10-01'
 start_bubble = '2004-01-01'
@@ -95,7 +96,7 @@ class DEBT_TO_GDP():
         plt.xticks(rotation=50, fontsize=8)
         plt.show()
 
-class FEDFUNDS():
+class BUBBLE_FEDFUNDS():
     def __init__(self, start, end, frequency='q'): 
         '''
         Parameters: 
@@ -151,8 +152,45 @@ class FEDFUNDS():
         plt.xticks(rotation=50, fontsize=10)
         plt.show()
     
+class HOUSEHOLD_SPENDING(): 
+    def __init__(self, start, end, frequency='q'): 
+        '''
+        Parameters: 
+        -----------
+        frequency: str
+        'd' = daily
+        'w' = weekly
+        'bw' = biweekly
+        'm' = monthly
+        'q' = quarterly
+        'sa' = semiannual
+        'a' = annual
+        start + end: datetime or datetime-like str
+        '''
+        self.start = start
+        self.end = end
+        self.frequency = frequency
 
+    def spending(self): 
+        list = [] 
+        # Billions of Dollars (Monthly)
+        list.append('PCE') # Personal Consumption Expenditures 
+        list.append('PI') # Personal Income 
+        list.append('TOTALSL') # Total Consumer Credit Owned and securitized 
+        # % Seasonally Adjusted Annually 
+        list.append('PSAVERT') # Personal Saving Rate 
 
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+
+        return df
+
+    def plot_consumer_spending(self): 
+        df = self.spending()
+        return df 
 
 
 #calling = DEBT_TO_GDP(start_early90, start_top)
@@ -160,4 +198,4 @@ class FEDFUNDS():
 #calling.plot_debt2gdp_ratio()
 
 
-print(f" 1990s: {start_early90} \n 2001 Recession Start: {start_recession01} \n 2001 Recession End: {end_recession01} \n Bubble Start: {start_bubble} \n Top Start: {start_top}")
+print(f" 1990s: {start_early90} \n LTCM Crash: {start_ltcm} \n 2001 Recession Start: {start_recession01} \n 2001 Recession End: {end_recession01} \n Bubble Start: {start_bubble} \n Top Start: {start_top}")
