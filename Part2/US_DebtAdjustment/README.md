@@ -75,3 +75,45 @@
 #### Issues within Fannie Mae and Freddie Mac 
 - Treasury Secretary Henry Paulson gets President Bush's support in fall of 2006 to pass legislation for reforms 
 - Nothing happened till 2008
+
+## Emerging Broader-Based Bubble 
+--- 
+### Broader Economy Bubble Signs 
+- savings rates declined 
+- increase in foreign capital inflows
+- lowering global export market share to emerging countries (especially China)
+- manufacturing employment falls 
+#### Housing Market Camouflaged 
+- increase in construction employment 
+#### High Debt Growth -> Funding Consumption 
+- via mortgages and other debt instruments
+- debt not being used to grow income (aka using for investment)
+- US citizens using debt to consume more than they earn 
+> ### Unsustainable Dynamic: 
+> - Savings Cannot Fall Forever
+> - Lending Cannot Increase Forever 
+> #### Debts Due = Cash Flow Problems 
+
+### *"Shadow Banking"* = New Instruments Outside of Regulation 
+- higher risk lending increasing -> common for bubbles 
+- new instruments to get around more established ones with fewer regulations (thus cheaper and easier)
+- appear safe via garuntees or sales tactics 
+- *traditional regulated banking system backed by the* **FDIC's Systemic Risk Exemption** *allowing them to do more to step in and help*
+
+> ### 5 Key Components Fueling Leverage Outside the Traditional Bankig System 
+> #### Mostly Short-Term and Unregulated 
+> 1. **Repo Agreements + Commercial Paper**
+>       - short-term borrowing for banks and corporations 
+> 2. **Large Institutional Depositors Outside Protected Banking System**
+>       - Treasury Security Demand > Supply 
+>       - shortage of safe assets for investors 
+>       - *SUBS: asset-backed commercial paper + repo 
+> 3. **Money Market Funds (MMF) developed**
+>       - short-term savings with higher returns (than traditional bank acounts)
+>       - low additional risk 
+> 4. **Dollar Lending Globalization**
+>       - increase in dollar borrowing/lending in foreign markets 
+> 5. **Securitization of Lending**
+>       - banks able to sell loan portfolios to other investors 
+>       - *"Moral Hazard"* by banks increased incentive to make riskier loans 
+
