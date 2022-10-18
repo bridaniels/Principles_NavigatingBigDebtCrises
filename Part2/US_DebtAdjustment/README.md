@@ -78,6 +78,7 @@
 
 ## Emerging Broader-Based Bubble 
 --- 
+### Low Interest Rates + Easy Money + Lax Regulations + Risky Financial Innovations
 ### Broader Economy Bubble Signs 
 - savings rates declined 
 - increase in foreign capital inflows
@@ -116,4 +117,12 @@
 > 5. **Securitization of Lending**
 >       - banks able to sell loan portfolios to other investors 
 >       - *"Moral Hazard"* by banks increased incentive to make riskier loans 
+
+### Asset/Liability Missmatches 
+1. Borrowing ST and Lending LT 
+    - squeezed when ST lender stops lending or lends at higher IR 
+2. Lending to Risky Borrowers at Higher IR than They Borrowed for Credit Spread 
+    - until default rates pick up to a level greater than the credit spread 
+3. Borrowing in One Currency and Lending/Investing in another 
+    - borrowed currency rises -> pay back loan at a higher exchange rate/interest rate 
 
