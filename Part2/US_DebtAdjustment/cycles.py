@@ -31,8 +31,16 @@ start_recession01 = '2001-01-01'
 end_recession01 = '2001-10-01'
 start_bubble = '2004-01-01'
 start_top = '2007-04-01'
+start_07 = '2007-01-01'
+start_08 = '2008-01-01'
 
+'''
 
+2008 Bubble: 2004-2008
+- Housing Market Debt Bubble
+- Emerging Broader Based Bubble 
+
+'''
 
 class DEBT_TO_GDP():
     def __init__(self, start, end, frequency='q'): 
@@ -252,9 +260,12 @@ class HOUSEHOLD_SPENDING():
 
 
 
-#calling = DEBT_TO_GDP(start_early90, start_top)
-#print(calling.debt_gdp_df())
-#calling.plot_debt2gdp_ratio()
 
-
-print(f" 1990s: {start_early90} \n LTCM Crash: {start_ltcm} \n 2001 Recession Start: {start_recession01} \n 2001 Recession End: {end_recession01} \n Bubble Start: {start_bubble} \n Top Start: {start_top}")
+print(f" 1990s: {start_early90} \n\
+     LTCM Crash: {start_ltcm} \n\
+         2001 Recession Start: {start_recession01} \n\
+             2001 Recession End: {end_recession01} \n\
+                 Bubble Start: {start_bubble} \n\
+                     2007 Start: {start_07} \n\
+                        Top Start: {start_top} \n\
+                            2008 Start: {start_08} ")

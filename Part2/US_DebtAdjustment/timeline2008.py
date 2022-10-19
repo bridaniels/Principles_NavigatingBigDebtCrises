@@ -40,7 +40,9 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         '2007-03-10',
         '2007-03-23',
         '2007-05-17',
-        '2007-05-25'
+        '2007-05-25',
+        '2007-06-15',
+        '2007-07-13'
         
         ],
     'event': [ 
@@ -68,7 +70,9 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         'Mortgage lenders credit lines being cut off due to high default rates on mortgages written in 2006 (more relaxed standards).',
         'Existing-home sales rise most in 3 years.',
         'Mixed reading on the housing sector glossed over in lieu of growth in industrial output.',
-        'Home sales surged in April by largest jump in 14 years.'
+        'Home sales surged in April by largest jump in 14 years.',
+        'Subprime mortgage delinquencies growing. Fed holds a hearing to assess abusive lending practices.',
+        'Fitch may downgrade bonds tied to subprime mortgages.'
 
 
 
@@ -88,7 +92,8 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         '2006-07-10',
         '2007-03-22',
         '2007-03-28',
-        '2007-05-25'
+        '2007-05-25',
+        '2007-06-15'
         
         
         ],
@@ -103,7 +108,8 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         'Former Goldman Sachs Exec. Henry M. Paulson sworn in as Treasury Secretary.',
         'Fed stops tightening leaving rates unchanged at 5.25% and markets soar (DJIA best 3 day performance since 2004).',
         'Chairman Bernanke in Congressional Testimony claiming no concerns for systemic risk from subprime market.',
-        'Largest jump in home sales over past 14 years dampens hopes of monetary policy easing.'
+        'Largest jump in home sales over past 14 years dampens hopes of monetary policy easing.',
+        'Federal Reserve holds a hearing to address abusive lending practices with subprime mortgages.'
 
         ]
 
@@ -131,7 +137,14 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         '2007-04-26', 
         '2007-05-17',
         '2007-05-02',
-        '2007-06-05'
+        '2007-06-05',
+        '2007-06-08',
+        '2007-06-08',
+        '2007-06-21',
+        '2007-07-03',
+        '2007-07-13',
+        '2007-07-14',
+        '2007-07-14'
 
     ],
     'event': [
@@ -154,8 +167,32 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         'Durable goods strong.',
         'Mixed reading on the housing sector glossed over in lieu of growth in industrial output.',
         'Economic data renews confidence in the economy and hit record closes across major indexes.',
-        'Slight gains cause Chinese market slide to be shrugged off.'
+        'Slight gains cause Chinese market slide to be shrugged off.',
+        '10-yr Treasury rates rise above 5% for the first time since previous summer.',
+        'Share prices with steepest 3-day decline since February.',
+        'Bear Stearns saves 2 hedge funds from collapse and baisl out another troubled fund.',
+        'Pickup in implied volatility (from very low levels). Overall market volatility expected to stay low.',
+        'Fitch may downgrade bonds tied to subprime mortgages.',
+        'Dow and S&P 500 setting record highs. Dow swung 450+ points and rose 283 points in one day.'
+        'Investors uneasy about subprime loans and impact on the broader economy.'
 
     ]
 
 })
+
+bank_bankruptcy_timeline = pd.DataFrame.from_dict({
+    'date': [
+        '2007-04-02'
+    ],
+    'business': [
+        'New Century Financial Corp.'
+
+    ],
+    'what happened':[ 
+        'largest independent U.S. subprime mortgage provider'
+    ]
+})
+
+
+# References: 
+# New Century: https://www.reuters.com/article/us-newcentury-bankruptcy-idUSN0242080520070403
