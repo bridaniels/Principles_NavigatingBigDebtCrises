@@ -93,7 +93,7 @@ class DEBT_TO_GDP():
                 ha = 'left', 
                 va = 'center', 
                 fontsize=12)
-        plt.xticks(rotation=50, fontsize=8)
+        plt.xticks(rotation=50, fontsize=15)
         plt.show()
 
 class BUBBLE_FEDFUNDS():
@@ -147,7 +147,7 @@ class BUBBLE_FEDFUNDS():
                     xycoords='axes fraction', 
                     ha = 'left', 
                     va = 'center', 
-                    fontsize=10)
+                    fontsize=15)
         
         plt.xticks(rotation=50, fontsize=10)
         plt.show()
@@ -177,8 +177,8 @@ class HOUSEHOLD_SPENDING():
         list.append('PCE') # Personal Consumption Expenditures 
         list.append('PI') # Personal Income 
         list.append('TOTALSL') # Total Consumer Credit Owned and securitized 
-        # % Seasonally Adjusted Annually 
-        list.append('PSAVERT') # Personal Saving Rate 
+        # FED FUNDS -> in percent format 
+        list.append('FEDFUNDS')
 
         df = {}
         for i in range(len(list)): 
@@ -186,11 +186,70 @@ class HOUSEHOLD_SPENDING():
         df = pd.DataFrame(df)
         df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
 
+        df['change_pce'] = (df.PCE - df.PCE.shift(4,axis=0))/df.PCE.shift(4,axis=0)
+        max_pce = df['change_pce'].idxmax()
+        df['change_totalsl'] = (df.TOTALSL - df.TOTALSL.shift(4,axis=0))/df.TOTALSL.shift(4,axis=0)
+        max_totalsl = df.change_totalsl.idxmax()
+        df['change_pi'] = (df.PI - df.PI.shift(4,axis=0))/df.PI.shift(4,axis=0)
+        max_pi = df.change_pi.idxmax()
+
+        df['FEDFUNDS'] = df['FEDFUNDS']/100
+
+        df = df.dropna()
+
         return df
 
     def plot_consumer_spending(self): 
         df = self.spending()
-        return df 
+
+        max_pce = df['change_pce'].idxmax()
+        max_totalsl = df.change_totalsl.idxmax()
+        max_pi = df.change_pi.idxmax()
+
+        pce_change = df.PCE.max() - df.PCE.min()
+        totalsl_change = df.TOTALSL.max() - df.TOTALSL.min()
+        pi_change =df.PI.max() - df.PI.min()
+
+        fig, ax = plt.subplots(figsize=(16,8))
+
+        ax.set_title("Consumer Spending VS. Borrowing", fontsize=25)
+
+        sns.lineplot(x=df.index, y=df.PCE, ax=ax, label='Personal Consumption Expenditures', alpha=0.6)
+        sns.lineplot(x=df.index, y=df.TOTALSL, ax=ax, label='Total Consumer Credit Owned and Securitized', alpha=0.6)
+        sns.lineplot(x=df.index, y=df.PI, ax=ax, label='Personal Income', alpha=0.6)
+        ax.set_ylabel("Billions", fontsize=15)
+
+        ax.legend(loc='best', bbox_to_anchor=(0.5,-0.43,0.5,0.8))
+        plt.xticks(rotation=50, fontsize=10)
+
+        ax2 = ax.twinx()
+        sns.lineplot(x=df.index, y=df.change_pce, ax=ax2, label='PCE change')
+        sns.lineplot(x=df.index, y=df.change_totalsl, ax=ax2, label='TOTALSL change')
+        sns.lineplot(x=df.index, y=df.change_pi, ax=ax2, label='PI change')
+        sns.lineplot(x=df.index, y=df.FEDFUNDS, ax=ax2, label='FEDFUNDS', color='green')
+
+        ax2.axvline(x=max_pce, ymin=0, ymax=1, linestyle='--', alpha=0.8, linewidth=0.8, label='PCE Max')
+        ax2.axvline(x=max_totalsl, ymin=0,ymax=1, linestyle='--', linewidth=0.8, alpha=0.8, label='TOTALSL Max')
+        ax2.axvline(x=max_pi, ymin=0, ymax=1, linestyle='--', linewidth=0.8, alpha=0.8, label='PI Max')
+
+        ax2.set_ylabel("Percent Change YOY", fontsize=15)
+
+        ax2.yaxis.set_major_formatter(PercentFormatter(xmax=1))
+        plt.xticks(rotation=50, fontsize=10)
+
+        ax2.annotate(f"Federal Funds Effective Rate (FEDFUNDS) Cuts from 2001 Recession Stimulated Borrowing and Spending by Households \n\
+                Changes in Billions: \n    \
+                Personal Income: {round(pi_change,2)} \n    \
+                Personal Consumption Expenditures: {round(pce_change, 2)}\n    \
+                Total Consumer Credit Owned and Securitized: {round(totalsl_change, 2)}",
+                xy=(0,-0.3),
+                xycoords='axes fraction',
+                ha='left',
+                va='center',
+                fontsize=15)
+
+        plt.show()
+
 
 
 #calling = DEBT_TO_GDP(start_early90, start_top)
