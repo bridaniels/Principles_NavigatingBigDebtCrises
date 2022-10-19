@@ -34,9 +34,13 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         '2006-10-27',
         '2006-11-07',
         '2006-12-06',
+        '2007-01-04',
         '2007-01-26',
         '2007-02-08',
-        '2007-03-10'
+        '2007-03-10',
+        '2007-03-23',
+        '2007-05-17',
+        '2007-05-25'
         
         ],
     'event': [ 
@@ -58,10 +62,13 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         'Housing Market Weakening: Offering Price Cuts + Discounts',
         'Number of unsold homes increasing and builders beginning to pull out',
         'Home price statistics misleading due to only factoring in homes actually sold',
+        'SEC memo: With refinancing and real estate booms over, smaller subprime originators business models no longer viable'
         '2006 home sales with the biggest drop in past 17 years',
         'HSBC reports ~20% more than anticipated charge for bad debts in 2006 due to problems in mortgage portfolio.',
-        'Mortgage lenders credit lines being cut off due to high default rates on mortgages written in 2006 (more relaxed standards).'
-
+        'Mortgage lenders credit lines being cut off due to high default rates on mortgages written in 2006 (more relaxed standards).',
+        'Existing-home sales rise most in 3 years.',
+        'Mixed reading on the housing sector glossed over in lieu of growth in industrial output.',
+        'Home sales surged in April by largest jump in 14 years.'
 
 
 
@@ -78,7 +85,10 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         '2005-08-28',
         '2006-02-01',
         '2006-04-19',
-        '2006-07-10'
+        '2006-07-10',
+        '2007-03-22',
+        '2007-03-28',
+        '2007-05-25'
         
         
         ],
@@ -90,7 +100,10 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         'Greenspan predicts that the housing boom and consumer spending spree is near an end',
         'Greenspan steps down after 18 years of service as Federal Reserve Chairman. Replaced by Ben Bernanke.',
         'Fed signals policy shift on interest rates. Might stop campaign to raise IR next month (ST IR moved up 15x in the past 2 years)',
-        'Former Goldman Sachs Exec. Henry M. Paulson sworn in as Treasury Secretary.'
+        'Former Goldman Sachs Exec. Henry M. Paulson sworn in as Treasury Secretary.',
+        'Fed stops tightening leaving rates unchanged at 5.25% and markets soar (DJIA best 3 day performance since 2004).',
+        'Chairman Bernanke in Congressional Testimony claiming no concerns for systemic risk from subprime market.',
+        'Largest jump in home sales over past 14 years dampens hopes of monetary policy easing.'
 
         ]
 
@@ -109,7 +122,16 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         '2007-02-08',
         '2007-02-07',
         '2007-03-06',
-        '2007-03-10'
+        '2007-03-10',
+        '2007-03-22',
+        '2007-03-22',
+        '2007-04-02',
+        '2007-04-17',
+        '2007-04-22',
+        '2007-04-26', 
+        '2007-05-17',
+        '2007-05-02',
+        '2007-06-05'
 
     ],
     'event': [
@@ -123,7 +145,16 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         'HSBC reports ~20% more than anticipated charge for bad debts in 2006 due to problems in mortgage portfolio.',
         'China Black Tuesday: markets sell off and drop ~9% due to government plans to either raise interest rates or implement a capital gains tax.',
         '5-day Asian market slide ends as investors take advantage of low prices.',
-        'Mortgage lenders credit lines being cut off due to high default rates on mortgages written in 2006 (more relaxed standards).'
+        'Mortgage lenders credit lines being cut off due to high default rates on mortgages written in 2006 (more relaxed standards).',
+        'DJIA up 337 points with best 3 days since 2004.',
+        'Chinese stock market back up and running.',
+        'New Century Files for Bankruptcy',
+        'Strong earnings reports show a healthy increase in consumer spending.',
+        'Dow with three record highs in five days',
+        'Durable goods strong.',
+        'Mixed reading on the housing sector glossed over in lieu of growth in industrial output.',
+        'Economic data renews confidence in the economy and hit record closes across major indexes.',
+        'Slight gains cause Chinese market slide to be shrugged off.'
 
     ]
 
