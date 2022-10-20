@@ -42,7 +42,13 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         '2007-05-17',
         '2007-05-25',
         '2007-06-15',
-        '2007-07-13'
+        '2007-07-13',
+        '2007-07-16',
+        '2007-08-07',
+        '2007-08-09',
+        '2007-08-11',
+        '2007-08-31',
+        '2007-09-07'
         
         ],
     'event': [ 
@@ -72,7 +78,14 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         'Mixed reading on the housing sector glossed over in lieu of growth in industrial output.',
         'Home sales surged in April by largest jump in 14 years.',
         'Subprime mortgage delinquencies growing. Fed holds a hearing to assess abusive lending practices.',
-        'Fitch may downgrade bonds tied to subprime mortgages.'
+        'Fitch may downgrade bonds tied to subprime mortgages.',
+        'ABX Index Crash: (sub-indexed into *tranches* grouped by credit rating) Higher Rated Subprime Mortgage-Backed Securities(RMBS) Fell. Spreads Growing.',
+        'American Home Mortgage files for chapter 11 bankruptcy protection.',
+        'Gov. might raise limit on purchases of home loans by Fannie Mae and Fredie Mac to increase liquidity in mortgage market.',
+        'Europeans worried about subprime exposure.',
+        'Countrywide Financial: (largest mortgage lender in the US) at risk of bankruptcy. Tapped into $11.5b credit line to boost cash on hand.',
+        'Bush offers relief to some on home loans, by changing the federal mortgage insurance program.',
+        'American household sector with bad balance sheet and poor cash flows. Injecting more capital will only worsen issues.'
 
 
 
@@ -93,8 +106,12 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         '2007-03-22',
         '2007-03-28',
         '2007-05-25',
-        '2007-06-15'
-        
+        '2007-06-15',
+        '2007-08-07',
+        '2007-08-10',
+        '2007-08-11',
+        '2007-08-18',
+        '2007-08-22'
         
         ],
     'event': [
@@ -109,7 +126,12 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         'Fed stops tightening leaving rates unchanged at 5.25% and markets soar (DJIA best 3 day performance since 2004).',
         'Chairman Bernanke in Congressional Testimony claiming no concerns for systemic risk from subprime market.',
         'Largest jump in home sales over past 14 years dampens hopes of monetary policy easing.',
-        'Federal Reserve holds a hearing to address abusive lending practices with subprime mortgages.'
+        'Federal Reserve holds a hearing to address abusive lending practices with subprime mortgages.',
+        'Fed leaves interest rate unchanged at 5.25% (no signs of future cut).',
+        'Fed announces willingness to inject reserves and act as lender of last resort to keep financial markets churning.',
+        'Worldwide central banks injecting liquidity into the market to help keep financial markets afloat.',
+        'Fed cuts bank loan discount rate half a percent. Acknowledge that tight credit and uncertainty are hurting the overall market.',
+        'Top banks draw on Fed discount-lending rate amid credit market turmoil (taking loans directly from the Fed)'
 
         ]
 
@@ -144,8 +166,21 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         '2007-07-03',
         '2007-07-13',
         '2007-07-14',
-        '2007-07-14'
-
+        '2007-07-14',
+        '2007-07-26',
+        '2007-08-01',
+        '2007-08-03',
+        '2007-08-09',
+        '2007-08-10',
+        '2007-08-16',
+        '2007-08-22',
+        '2007-08-22', 
+        '2007-08-31',
+        '2007-09-01',
+        '2007-09-06',
+        '2007-09-07',
+        '2007-09-07',
+        '2007-09-08'
     ],
     'event': [
         'Citigroup expanding existing retail business across the US',
@@ -173,8 +208,23 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         'Bear Stearns saves 2 hedge funds from collapse and baisl out another troubled fund.',
         'Pickup in implied volatility (from very low levels). Overall market volatility expected to stay low.',
         'Fitch may downgrade bonds tied to subprime mortgages.',
-        'Dow and S&P 500 setting record highs. Dow swung 450+ points and rose 283 points in one day.'
-        'Investors uneasy about subprime loans and impact on the broader economy.'
+        'Dow and S&P 500 setting record highs. Dow swung 450+ points and rose 283 points in one day.',
+        'Investors uneasy about subprime loans and impact on the broader economy.',
+        'Markets fall as housing market concerns grow and oil prices near record levels.',
+        'Slow growth in consumer spending, but with inflation moderated it appears consumer mood has increased.',
+        'Credit fears cause stocks to fall.',
+        'BNP Paribas (France): froze 2.2b USD citing problems in US subprime mortgage market causing evaporating liquidity which makes it impossible to value various assets regardless of credit ratings.',
+        'BNP Paribas reaction to US mortgage market causes stocks to fall.',
+        'Largest mortgage lender in the US (Countrywide Capital) draws on credit line for cash and is at risk of bankruptcy -> market reacts negatively.',
+        'Bank of America takes Countrywide Financial stake.',
+        'Top banks draw on Fed discount-lending rate amid credit market turmoil (taking loans directly from the Fed).',
+        'President Bush to change federal mortgage lending insurance program to help lower payment requirements, increase loan limits, and offer flexible pricing.',
+        'Reasurring words from president and the fed. chairman that Wall Street will not be left to handle alone cause big market gains.',
+        'Fed says credit crisis is contained and stocks fall.',
+        'Home foreclosure rate hits a record.', 
+        'Abnormal Credit Crisis: *credit* continues to flow and *debt* continues to increase. American household secotor with bad balance sheets and poor cash flows (allowing more credit will only worsen the issues).',
+        'Stocks fall due to poor job report showing increased unemployment (fear of recession looming).'
+
 
     ]
 
@@ -182,14 +232,17 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
 
 bank_bankruptcy_timeline = pd.DataFrame.from_dict({
     'date': [
-        '2007-04-02'
+        '2007-04-02',
+        '2007-08-07'
     ],
     'business': [
-        'New Century Financial Corp.'
+        'New Century Financial Corp.',
+        'American Home Mortgage'
 
     ],
     'what happened':[ 
-        'largest independent U.S. subprime mortgage provider'
+        'largest independent U.S. subprime mortgage provider',
+        '10th lartest retail mortgage lender. Filed for bankruptcy and liquidated.'
     ]
 })
 

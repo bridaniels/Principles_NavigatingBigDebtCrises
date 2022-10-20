@@ -3,6 +3,10 @@
 
 ## Overall Market and Economy Doing Well
 - Markets flat in February + March with low volatility and priced to maintain it
+
+# First Half of 2007
+---
+
 ## Problems with Subprime Mortgages
 - Investment banks packaging and securitizing assets for sale. (CDOs, synthetic CDOs, CMOs, etc.)
     - rating best slice AAA, the next slice AA, ....
@@ -67,3 +71,32 @@
         - prices of securities fell, hudge funds forced into liquidations 
     - Bear Stearns with a promised $3.2b bailout (later reduced to $1.6b)
     - other banks seized collateral from the hedge funds to help keep the market stable 
+
+# Summer of 2007 
+---
+
+## [ABX Index](https://www.investopedia.com/terms/a/abx-index.asp)
+## [2008 ABX](https://www.investopedia.com/ask/answers/120514/how-did-abx-index-behave-during-2008-subprime-mortgage-crisis.asp)
+---
+- ABX index declining + more lenders reporting missed loan payments
+- News emerges and markets begin to sell off 
+
+## Self-Reinforcing Debt Crisis: 
+---
+- [Mark-to-Market Accounting](x_definitions.md#mark-to-market-accounting) + High Leverage 
+    - assets bought via leverage have declining value 
+    - weaker asset prices = less avaliable lending
+    - values + losses on positions estimated via pricing of various liquid assets 
+    - financial sector was incurring loses before they reported them 
+    - *many fancing debt squeezes*
+- Losses Occur -> Lenders+Borrowers are less able to Lend and Borrow
+
+> Bridgewater Daily Observations July 26, 2007: 
+> - Financial fragility coming from leveraging and lending practices 
+>    - IR will rise until the system breaks 
+>    - BREAKS: high volatility + wide carry and credit spreads 
+> #### **`Results = f(who is carrying what positions) + f(positions vs. various players)`**
+> - Bridgewater Exposure Study with Derivative Focus: 
+>   - revealed that no one was truly aware of their full exposure across markets
+>   - larger more regulated parties had easier to assess exposure 
+>   - *With Derivatives*, dealers know thier counterparties but are not aware of other deals the counterparty has on their books. 
