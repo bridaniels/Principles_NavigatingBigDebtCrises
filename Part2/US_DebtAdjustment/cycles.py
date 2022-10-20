@@ -337,12 +337,45 @@ class DEBT_FINANCED_ASSETS():
 
         plt.show()
 
+class HOME_PRICES(): 
+    def __init__(self, start, end, frequency='q'): 
+        '''
+        Parameters: 
+        -----------
+        frequency: str
+            'd' = daily
+            'w' = weekly
+            'bw' = biweekly
+            'm' = monthly
+            'q' = quarterly
+            'sa' = semiannual
+            'a' = annual
+        start + end: datetime or datetime-like str
+        '''
+        self.start = start
+        self.end = end
+        self.frequency = frequency
+
+    def home_price_df(self): 
+        list = []
+
+        # Home Price Index 
+        list.append('USSTHPI') #All-Transactions House Price Index for the United States (iIndex 1980: Q1 = 100) 
+        list.append('CSUSHPINSA') # S&P/Case-Shiller U.S. National Home Price Index (indexed to January 2000 at 100 (Not Seasonally Adjusted))
+
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
 
 
+        jan_idx = df._get_value('2000-01-01','USSTHPI')
+        df['to_jan_idx'] = (df.USSTHPI/jan_idx) * 100 
+
+        return df 
 
 
-
-# S&P/Case-Shiller U.S. National Home Price Index (CSUSHPINSA) indexed to January 2000 at 100 (Not Seasonally Adjusted)
 
 print(f" 1990s: {start_early90} \n\
      LTCM Crash: {start_ltcm} \n\

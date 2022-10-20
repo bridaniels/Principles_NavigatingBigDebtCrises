@@ -20,6 +20,9 @@
     - Lenders become more cautious 
 - Everybody wanted to buy a house or lend to someone looking to buy a house
 
+## Leading up to the Bubble: 
+---
+
 ### Early and Healthy Start of Debt Cycle "Goldilocks Period":
 - **Economy Strong, Income Moderate, Appreciating Asset Prices** 
 - Debt Grows in Line with Income Growth 
