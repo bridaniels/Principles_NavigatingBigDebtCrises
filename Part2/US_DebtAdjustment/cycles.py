@@ -373,7 +373,36 @@ class HOME_PRICES():
         jan_idx = df._get_value('2000-01-01','USSTHPI')
         df['to_jan_idx'] = (df.USSTHPI/jan_idx) * 100 
 
+        df['yoy_change'] = (df.CSUSHPINSA - df.CSUSHPINSA.shift(4,axis=0)) / df.CSUSHPINSA.shift(4,axis=0)
+
         return df 
+    
+    def plot_home_price(self): 
+        df = self.home_price_df()
+
+        fig, ax = plt.subplots(figsize=(16,8))
+
+        ax.set_title("S&P/Case-Shiller U.S. National Home Price Index", fontsize=25)
+        sns.barplot(x=df.index, y=df.yoy_change, ax=ax, alpha=0.3, label='YOY index change')
+        ax.yaxis.set_major_formatter(PercentFormatter(xmax=1))
+        ax.set_ylabel('YOY Index Growth')
+
+        plt.xticks(rotation=50, fontsize=10)
+
+        ax2 = ax.twinx()
+        sns.lineplot(x=df.index, y=df.CSUSHPINSA, ax=ax2, label='Home Price Index', color='darkblue')
+        ax2.axvline(x='2000-01-01', linestyle='--', alpha=0.5, label='January 1, 2000')
+        ax2.axhline(y=100, linestyle='--', alpha=0.5)
+        ax2.set_ylabel("Index January 2000 = 100")
+
+        ax2.axvspan(xmin=start_recession01, xmax=end_recession01, alpha=0.2, label='2001 Recession',color='yellow')
+        ax2.axvspan(xmin=start_bubble, xmax=start_top, alpha=0.2, label='2008 Bubble', color='orange')
+
+        ax2.legend(loc=2)
+
+
+        plt.show()
+
 
 
 
