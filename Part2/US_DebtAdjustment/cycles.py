@@ -376,6 +376,95 @@ class HOME_PRICES():
         df['yoy_change'] = (df.CSUSHPINSA - df.CSUSHPINSA.shift(4,axis=0)) / df.CSUSHPINSA.shift(4,axis=0)
 
         return df 
+
+
+    def sold_by_df(self): 
+        list = []
+        # Thousands of Units 
+        # HOUSES SOLD BY TYPE OF FINANCING
+        list.append('HSTFC') #Cash Purchase 
+        list.append('HSTFCM') #Conventional 
+        list.append('HSTFFHAI') #FHA Insured 
+        list.append('HSTFVAG') #Verteran's Administration (VA) Guaranteed
+
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+
+        df['con_cash'] = df.HSTFCM + df.HSTFC
+        df['con_cash_va'] = df.con_cash + df.HSTFVAG
+        df['con_cash_va_fha'] = df.con_cash_va + df.HSTFFHAI
+
+        return df 
+
+    def sales_p_df(self): 
+        list=[]
+        # Thousands of Units 
+        #NEW HOUSES SOLD BY SALES PRICE IN THE US
+        list.append('NHSUSSP75O') #BETWEEN $750,000 and Over
+        list.append('NHSUSSP50T74') #Between $500,000 and $749,999
+        list.append('NHSUSSP40T49') #Between $400,000 and $499,999
+        list.append('NHSUSSP30T39') #Between $300,000 and $399,999
+        list.append('NHSUSSP20T29') #Between $200,000 and $299,999
+        list.append('NHSUSSP15T19') #Between $150,000 and $199,999
+        list.append('NHSUSSPU15') #Under $150,000
+
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+
+        return df 
+
+    def completed_df(self): 
+        list=[]
+        # Thousands of Units 
+        #New Privately-Owned Housing Units Completed
+        list.append('COMPUTNSA') #Total Units 
+        list.append('COMPU1UNSA') #Single-Family Units 
+        list.append('COMPU24UNSA') #Units in Buildings with 2-4 Units 
+        list.append('COMPU5MUNSA') #Units in Buildings with 5 Units or More
+
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+
+        return df 
+
+    def financing_df(self): 
+        list = []
+
+        # Dollars
+        # AVERAGE SALES PRICE OF HOUSES SOLD BY TYPE OF FINANCING
+        list.append('ASPTFC') #Cash Purchase 
+        list.append('ASPTFCM') #Conventional
+        list.append('ASPTFFHAI') #FHA Insured 
+        list.append('ASPTFVAG') #Verteran's Administration (VA) Guaranteed
+        list.append('ASPUS') #Houses Sold 
+        list.append('ASPNHSUS') #New Houses Sold 
+        # MEDIAN SALES PRICE OF HOUSES SOLD BY TYPE OF FINANCING 
+        list.append('MSPTFC') #Cash Purchase
+        list.append('MSPTFCM') #Conventional
+        list.append('MSPTFFHAI') #FHA Insured
+        list.append('MSPTFVAG') #Veteran's Administration (VA) Guaranteed 
+        list.append('MSPUS') #Houses Sold
+        list.append('MSPNHSUS') #New Houses Sold
+
+        df = {}
+        for i in range(len(list)): 
+            df[list[i]] = fred.get_series(list[i], self.start, self.end, frequency=self.frequency)
+        df = pd.DataFrame(df)
+        df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
+
+        return df 
+
+        
+
     
     def plot_home_price(self): 
         df = self.home_price_df()
@@ -403,6 +492,78 @@ class HOME_PRICES():
 
         plt.show()
 
+    def plot_home_sales(self): 
+        df1 = self.sold_by_df()
+        df2 = self.sales_p_df()
+        df3 = self.completed_df()
+        df4 = self.financing_df()
+
+        fig, ax = plt.subplots(2,2, figsize=(25,18))
+
+        # PLOT ONE
+        ax[0,0].set_title("Houses Sold by Type of Financing") 
+        ax[0,0].plot(df1.HSTFFHAI, label='FHA Insured',alpha=0.4, color='purple')
+        ax[0,0].legend(loc=2, fontsize=11)
+        ax[0,0].set_ylabel("Thousands of FHA Insured Units", fontsize=12)
+        ax2 = ax[0,0].twinx()
+        ax2.plot(df1.HSTFCM, label='Conventional')
+        ax2.plot(df1.con_cash, label='+ Cash Purchase')
+        ax2.plot(df1.con_cash_va, label='+ VA Guaranteed')
+        ax2.plot(df1.con_cash_va_fha, label='+ FHA Insured')
+        ax2.legend(loc=1, fontsize=12)
+        ax2.set_ylabel("Thousands of Units", fontsize=11)
+        ax2.grid(False)
+
+        # PLOT TWO 
+        ax[0,1].set_title("Houses Sold by Sales Price")
+        ax[0,1].plot(df2.NHSUSSP75O, label="$750,000 +")
+        ax[0,1].plot(df2.NHSUSSP50T74, label="$500,000 - $749,999")
+        ax[0,1].plot(df2.NHSUSSP40T49, label="$400,000 - $499,999")
+        ax[0,1].plot(df2.NHSUSSP30T39, label="$300,000 - $399,999")
+        ax[0,1].plot(df2.NHSUSSP20T29, label="$200,000 - $299,999")
+        ax[0,1].plot(df2.NHSUSSP15T19, label="$150,000 - $199,999")
+        ax[0,1].plot(df2.NHSUSSPU15, label="$150,000 - $0", color='green')
+        ax[0,1].set_ylabel("Thousands of Units", fontsize=11)
+        ax[0,1].legend(loc=6, fontsize=11)
+
+        # PLOT THREE 
+        ax[1,0].set_title("Completed Privately-Owned Housing Units")
+        ax[1,0].plot(df3.COMPUTNSA, label='Total Units')
+        ax[1,0].plot(df3.COMPU1UNSA, label='Single Family Units')
+        ax[1,0].plot(df3.COMPU24UNSA, label='2-4 Unit Buildings')
+        ax[1,0].plot(df3.COMPU5MUNSA, label='5+ Unit Buildings')
+        ax[1,0].legend(loc=2, fontsize=11)
+        ax[1,0].set_ylabel("Thousands of Units", fontsize=12)
+
+
+        # PLOT FOUR 
+        ax[1,1].set_title("Average and Medial Home Sale Prices By Financing Type")
+        ax[1,1].plot(df4.ASPTFC, label='Average Cash')
+        ax[1,1].plot(df4.MSPTFC, label='Median Cash')
+        ax[1,1].fill_between(x=df4.index, y1=df4.ASPTFC, y2=df4.MSPTFC, color='blue', alpha=0.2)
+        ax[1,1].plot(df4.ASPTFCM, label='Average Conventional')
+        ax[1,1].plot(df4.MSPTFCM, label='Median Conventional')
+        ax[1,1].fill_between(x=df4.index, y1=df4.ASPTFCM, y2=df4.MSPTFCM, color='lightgreen', alpha=0.2)
+        ax[1,1].plot(df4.ASPTFFHAI, label='Average FHA Insured')
+        ax[1,1].plot(df4.MSPTFFHAI, label='Median FHA Insured', color='orange')
+        ax[1,1].fill_between(x=df4.index, y1=df4.ASPTFFHAI, y2=df4.MSPTFFHAI, color='orange', alpha=0.2)
+        ax[1,1].plot(df4.ASPTFVAG, label='Average VA Guarantee')
+        ax[1,1].plot(df4.MSPTFVAG, label='Median VA Guarantee', color='darkred')
+        ax[1,1].fill_between(x=df4.index, y1=df4.ASPTFVAG, y2=df4.MSPTFVAG, color='red', alpha=0.2)
+        ax[1,1].set_ylabel("Average Purchase Price", fontsize=12)
+        ax[1,1].legend(loc=2, fontsize=11)
+
+
+        for a in ax.flatten(): 
+            plt.sca(a)
+            plt.xticks(rotation=50, fontsize=9)
+        plt.subplots_adjust(left=0.2,
+                        bottom=0.4,
+                        right=1,
+                        top=0.9,
+                        wspace=0.2,
+                        hspace=0.4)
+        plt.show()
 
 
 
