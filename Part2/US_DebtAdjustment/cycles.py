@@ -246,7 +246,7 @@ class HOUSEHOLD_SPENDING():
         plt.xticks(rotation=50, fontsize=10)
 
         ax2.annotate(f"Federal Funds Effective Rate (FEDFUNDS) Cuts from 2001 Recession Stimulated Borrowing and Spending by Households \n\
-                Changes in Billions: \n    \
+                Changes in Billions Over Charted Time: \n    \
                 Personal Income: {round(pi_change,2)} \n    \
                 Personal Consumption Expenditures: {round(pce_change, 2)}\n    \
                 Total Consumer Credit Owned and Securitized: {round(totalsl_change, 2)}",
@@ -376,6 +376,7 @@ class HOME_PRICES():
         df['yoy_change'] = (df.CSUSHPINSA - df.CSUSHPINSA.shift(4,axis=0)) / df.CSUSHPINSA.shift(4,axis=0)
 
         return df 
+
 
 
     def sold_by_df(self): 
@@ -564,6 +565,60 @@ class HOME_PRICES():
                         wspace=0.2,
                         hspace=0.4)
         plt.show()
+
+class MORTGAGE_DATA(): 
+        def __init__(self, start, end, frequency='q'): 
+            '''
+            Parameters: 
+            -----------
+            frequency: str
+                'd' = daily
+                'w' = weekly
+                'bw' = biweekly
+                'm' = monthly
+                'q' = quarterly
+                'sa' = semiannual
+                'a' = annual
+            start + end: datetime or datetime-like str
+            '''
+            self.start = start
+            self.end = end
+            self.frequency = frequency
+
+        def mortgage_df(self): 
+            list = []
+
+            #Millions of Dollars
+            list.append('ASTMA') #All Sectors; Total Mortgages; Asset, Level
+
+            #Debt Service Payments as a Percent of Disposable Personal Income 
+            list.append('TDSP') #TOTAL Household (Mortgage + Consumer)
+            list.append('MDSP') #Mortgage 
+            list.append('CDSP') #Consumer 
+
+            # Fixed Rate Mortgage Average 
+            list.append('MORTGAGE30US') #30-Year
+            list.append('MORTGAGE15US') #15-Year 
+
+            # Delinquency Rate 
+            list.append('DRSFRMACBS') #Single-Family Residential Mortgages, Booked in Domestic Offices, All Commercial Banks 
+            list.append('DRCRELEXFACBS') #Commercial Real Estate Loans (Excluding Farmland), Booked in Domestic Offices, All Commercial Banks 
+            list.append('DRFLACBS') #Farmland Loans, Booked in Domestic Offices, All Commercial Banks 
+
+            list.append('DRSFRMT100S') #Single-Family Residential Mortgages, Booked in Domestic Offices, Banks Ranked 1st to 100th Largest in Size by Assets
+            list.append('DRSFRMOBS') #Single-Family Residential Mortgages, Booked in Domestic Offices, Banks Not Among the 100 Largest in Size by Assets 
+            list.append('DRALT100S') #All Loans, Banks Ranked 1st to 100th Larges in Size by Assets 
+            list.append('DRALOBS') #All Loans, Banks Not Among the 100 Largest in Size by Assets 
+            list.append('DRSRET100S') #Loans Secured by Real Estate, Banks Ranked 1st to 100th Largest in Size by Assets 
+            list.append('DRSREOBS') #Loans Secured by Real Estate, Banks Not Among the 100 Largest in Size by Assets 
+
+
+            list.append('DRSREACBS') #Loans Secured by Real Estate, All Commercial Banks 
+            list.append('DRALACBS') #All Loans, All Commercial Banks
+            list.append('DRCLACBS') #Consumer Loans, All Commercial Banks 
+            list.append('DRBLACBS') #Business Loans, All Commercial Banks 
+
+
 
 
 

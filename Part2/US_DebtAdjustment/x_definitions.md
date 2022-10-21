@@ -2,6 +2,9 @@
 ---
 
 # **Bubble:**
+---
+
+### FHA Insured: 
 
 
 # **Top:** 
@@ -39,6 +42,13 @@
 
 
 ### Mark-to-Market Accounting: 
+
+
+### TED Spread: 
+
+### Commercial Paper:
+
+### Value-at-Risk (VAR): 
 
 
 

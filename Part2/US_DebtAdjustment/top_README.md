@@ -100,3 +100,53 @@
 >   - revealed that no one was truly aware of their full exposure across markets
 >   - larger more regulated parties had easier to assess exposure 
 >   - *With Derivatives*, dealers know thier counterparties but are not aware of other deals the counterparty has on their books. 
+
+## BNP Paribas: August 9, 2007 (France's Largest Bank)
+---
+- Froze $2.2b of investments across three funds due to holding US subprime mortgages (large losses)
+- European interbank lending becomes hesitant 
+- European Central Bank (ECB) injects 95b euros into banking system to set rates back to target (another 61b the following day)
+- *US* 
+    - Higher Yields on risky commercial paper and interbank lending rates
+    - squeeze in treasury bills*
+    - Money Market Funds (main holders of asset-backed commercial paper) hits to asset values 
+        - required assistance from sponsors, banks, and fund families to avoid **breaking the buck**
+            - Breaking the Buck: falling in value below amount deposited (never thought would happen) 
+
+## Unraveling in Interbank Market 
+---
+- TED Spread (classic measure of interbank stress): Higher Rate = Banks Demanding Higher IR to Compensate for Lending Risk 
+- Stocks Fall: Bank of Japan, ECB, and the Fed provide liquidity to the banks 
+- Biggest stock drop when Fed cut IR 0.5% inbetween meetings 
+- Alleviated Funding strains 
+- Most assumed the mortgage market would still eb contained 
+
+> # **Depression Gauge**
+> #### Big Debt Crises and Depressions Have Happened Before
+> #### Algorithm Based On: 
+> - Proximity of IR to 0%
+> - Debt Vulnerability Measures 
+> - Beginning of Debt Deleveraging Indicators 
+> ##### Change Overall Portfolio + Risk Controls (including counterparty risks)
+> - who is holding what positions and how they interact with each other can change many factors 
+> - handles counterparty risks and transaction costs in an environment of extreme risk-aversion and illiquidty 
+
+
+# Why Banks and Investors So Exposed to Risky Mortgage Securities: 
+---
+#### Thought Mortgage Securities Were Less Risky Than They actualy Were 
+#### Way Risk is Analyzed: 
+- Value at Risk (VAR): 
+    - commonly used by investment firms and commercial banks
+    - help determine magnitude and occurrence of potential losses 
+    - typically uses recent volatility as the main input
+    - determine how much risk (position size) one can take 
+- Recent volatility had been low and investors were assuming the good conditions would continue 
+- Boring Years Sow Seeds of Future Instability 
+- Low VAR encourages Increased Leverage 
+- Leverage is a Better Estimation of Future Volatility 
+- Subprime Mortgage Instruments had not yeat had a loss cycle or experienced much volatility in the past 
+- **VAR self-reinforcing on the downside**
+    - increased market volatility make riskiness look even worse -> increasing selling
+
+
