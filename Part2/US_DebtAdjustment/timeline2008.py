@@ -48,7 +48,14 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         '2007-08-09',
         '2007-08-11',
         '2007-08-31',
-        '2007-09-07'
+        '2007-09-07',
+        '2007-09-20',
+        '2007-09-28',
+        '2007-10-10',
+        '2007-10-25',
+        '2007-10-27',
+        '2007-11-02',
+        '2007-11-24'
         
         ],
     'event': [ 
@@ -85,7 +92,14 @@ housing_crisis_timeline = pd.DataFrame.from_dict({
         'Europeans worried about subprime exposure.',
         'Countrywide Financial: (largest mortgage lender in the US) at risk of bankruptcy. Tapped into $11.5b credit line to boost cash on hand.',
         'Bush offers relief to some on home loans, by changing the federal mortgage insurance program.',
-        'American household sector with bad balance sheet and poor cash flows. Injecting more capital will only worsen issues.'
+        'American household sector with bad balance sheet and poor cash flows. Injecting more capital will only worsen issues.',
+        'Fed calls for tighter mortgage regulations.',
+        'Home Sales + Prices FALL',
+        'Fannie and Freddie with new fund for affordable rental housing in a market with unaffordable subprime mortgages and falling home prices.',
+        'Home sales slump at 8-yr low.',
+        'Homeownership Declines for Four Consecutive Quarter.',
+        'New York Appraiser Inflated Value of Homes',
+        'Housing History suggestions a recession to follow. Fed forecasts no forseeable recession (unemployment barely rising).'
 
 
 
@@ -111,7 +125,10 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         '2007-08-10',
         '2007-08-11',
         '2007-08-18',
-        '2007-08-22'
+        '2007-08-22',
+        '2007-09-18',
+        '2007-09-22',
+        '2007-10-18'
         
         ],
     'event': [
@@ -131,7 +148,10 @@ federal_reserve_timeline = pd.DataFrame.from_dict({
         'Fed announces willingness to inject reserves and act as lender of last resort to keep financial markets churning.',
         'Worldwide central banks injecting liquidity into the market to help keep financial markets afloat.',
         'Fed cuts bank loan discount rate half a percent. Acknowledge that tight credit and uncertainty are hurting the overall market.',
-        'Top banks draw on Fed discount-lending rate amid credit market turmoil (taking loans directly from the Fed)'
+        'Top banks draw on Fed discount-lending rate amid credit market turmoil (taking loans directly from the Fed)',
+        'Fed cuts rates by 0.5% when market was expecting 0.25%. Market Rally.',
+        'Fed Govenor Warns Against Shielding Investors from Their Losses.',
+        'Fed puzzled by steady core inflation despite state of economy and financial markets.'
 
         ]
 
@@ -180,7 +200,27 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         '2007-09-06',
         '2007-09-07',
         '2007-09-07',
-        '2007-09-08'
+        '2007-09-08',
+        '2007-09-14',
+        '2007-09-14',
+        '2007-09-19',
+        '2007-09-21',
+        '2007-09-27',
+        '2007-10-02',
+        '2007-10-06',
+        '2007-10-09',
+        '2007-10-19',
+        '2007-10-22',
+        '2007-10-24',
+        '2007-10-30',
+        '2007-11-03',
+        '2007-11-03',
+        '2007-11-06',
+        '2007-11-08',
+        '2007-11-10',
+        '2007-11-20'
+
+
     ],
     'event': [
         'Citigroup expanding existing retail business across the US',
@@ -223,12 +263,32 @@ general_financial_news_timeline = pd.DataFrame.from_dict({
         'Fed says credit crisis is contained and stocks fall.',
         'Home foreclosure rate hits a record.', 
         'Abnormal Credit Crisis: *credit* continues to flow and *debt* continues to increase. American household secotor with bad balance sheets and poor cash flows (allowing more credit will only worsen the issues).',
-        'Stocks fall due to poor job report showing increased unemployment (fear of recession looming).'
+        'Stocks fall due to poor job report showing increased unemployment (fear of recession looming).',
+        'Credit Fears Ease, Markets Climb',
+        'Bank of England to provide a *liquidity support facility* to native european mortgage lender. Signifying broadening effects of US bred crisis.',
+        'Global markets rise after rate cut of 0.5% rather than 0.25%',
+        'Summer credit storm shows up on Wall Street reports. Goldman Sachs up, while Bear Stearns down.',
+        'Economic Indicators Drop Most in 6 Months as Confidence Ebbs',
+        'SEC opens investigation into credit rating agencies potential inflation of MBS due to conflict of interest.',
+        'Blue-Chip stocks into record territory. Banks predicted third quarter declines and eased anxiety arounding LT fallout from MBS.',
+        'Big Loss at Merrill Stirs Unease',
+        'S&P 500 closes at all-time high. High not reached again until 2013. JPM reports $2billion write-down.',
+        'Earnings Reports Trigger Steep Stock Sell-Offs.',
+        'Bear Stearns 3Q07 Earnings Down 61%. China Bank buys $1 billion stake.',
+        'Merrill Lynch 3Q07 with first quarterly loss in 6 years. Tied to subprime mortgage market and writing down value of debt obligations.',
+        'UBS with larger than expected loss.',
+        'Citigroup Chief set to exit amid losses.',
+        'Merrill Lynch still operating with interim CEO. Shares fall as speculation about future write-downs of high risk credit exposure.',
+        'Bond buyers loosing confidence as write-down pace accelerates with credit downgrades in mortgages. Concerned about spillage into other markets.',
+        'Morgan Stanley takes hit on Morgages',
+        'Wachovia, Bank of America, and JPMorgan Chase warn about continuous losses in credit market. Barclays of London denies asset write-down.',
+        'Credit concerns further drive down stock market.'
 
 
     ]
 
 })
+
 
 bank_bankruptcy_timeline = pd.DataFrame.from_dict({
     'date': [
@@ -246,6 +306,19 @@ bank_bankruptcy_timeline = pd.DataFrame.from_dict({
     ]
 })
 
+
+us_europe_crisis = pd.DataFrame.from_dict({
+    'dates': [ 
+        '2007-10-25',
+        '2007-11-10'
+
+    ],
+    'events': [ 
+        'Reduced growth forecast in Germany + Report by Bank of England that EU still vulnerable to US instability.',
+        'Barclays of London denies speculation of large asset write-down.'
+
+    ]
+})
 
 # References: 
 # New Century: https://www.reuters.com/article/us-newcentury-bankruptcy-idUSN0242080520070403
